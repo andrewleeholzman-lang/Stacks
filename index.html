@@ -1,0 +1,2862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Stacks — Curated Reading</title>
+<meta name="theme-color" content="#1a1612">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Stacks">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1612;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --rule: #c8bfaa;
+    --accent: #8b2000;
+    --accent-light: #c94a1a;
+    --muted: #6b6157;
+    --shadow: rgba(26,22,18,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh; overflow-x: hidden;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    background: var(--ink); color: var(--paper);
+    padding: 0 1rem; position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid var(--accent);
+  }
+  .masthead-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 1rem; padding: 0.6rem 0;
+  }
+  .masthead-left { display: flex; align-items: center; gap: 0.75rem; }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #555; flex-shrink: 0; transition: background 0.3s;
+  }
+  .status-dot.loading { background: #e8a000; animation: pulse 1s infinite; }
+  .status-dot.ready { background: #3a8a3a; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem,4vw,1.8rem); font-weight: 900;
+    letter-spacing: -0.02em; color: var(--paper); line-height: 1;
+  }
+  .masthead-date {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--rule); letter-spacing: 0.08em; text-transform: uppercase;
+    display: block; margin-top: 2px;
+  }
+  .masthead-tagline {
+    font-family: 'Source Serif 4', serif; font-style: italic;
+    font-size: 0.72rem; color: var(--rule); text-align: center; opacity: 0.85;
+    display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
+  }
+  .masthead-subtitle {
+    font-family: 'JetBrains Mono', monospace; font-style: normal;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-light); opacity: 0.9;
+  }
+  .masthead-quote {
+    font-family: 'Source Serif 4', serif; font-style: italic;
+    font-size: 0.68rem; color: var(--rule); opacity: 0.75;
+    max-width: 340px; line-height: 1.4;
+    animation: fadein 1.2s ease;
+  }
+  .masthead-quote-attr {
+    font-family: 'JetBrains Mono', monospace; font-style: normal;
+    font-size: 0.55rem; letter-spacing: 0.07em; color: var(--muted);
+    margin-top: 0.05rem;
+  }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 0.75; } }
+
+  /* MOBILE QUOTE BANNER — shown only on small screens */
+  .quote-banner {
+    display: none; background: var(--ink);
+    border-bottom: 1px solid rgba(200,191,170,0.12);
+    padding: 0.4rem 1rem; text-align: center;
+  }
+  .quote-banner-text {
+    font-family: 'Source Serif 4', serif; font-style: italic;
+    font-size: 0.68rem; color: var(--rule); opacity: 0.8; line-height: 1.4;
+  }
+  .quote-banner-attr {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.52rem;
+    letter-spacing: 0.07em; color: var(--muted); display: block; margin-top: 0.15rem;
+  }
+
+  /* BEAUTY TILES */
+  .card.beauty-tile { background: var(--ink); border-color: rgba(200,191,170,0.2); }
+  .card.beauty-tile::before { background: var(--accent-light); }
+  .card.beauty-tile:hover { box-shadow: 0 8px 24px rgba(26,22,18,0.4), 0 0 0 1px rgba(201,74,26,0.3); }
+  .beauty-art-img { width:100%; height:200px; object-fit:cover; display:block; transition:transform 0.3s ease; }
+  .card.beauty-tile:hover .beauty-art-img { transform:scale(1.03); }
+  .beauty-body { padding:1rem 1.1rem 0.9rem; display:flex; flex-direction:column; gap:0.5rem; flex:1; }
+  .beauty-label { font-family:'JetBrains Mono',monospace; font-size:0.58rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-light); opacity:0.9; }
+  .beauty-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; line-height:1.3; color:var(--paper); }
+  .beauty-meta { font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:var(--rule); opacity:0.7; letter-spacing:0.04em; margin-top:0.15rem; line-height:1.5; }
+  .beauty-poem { font-family:'Source Serif 4',serif; font-style:italic; font-size:0.88rem; line-height:1.7; color:var(--paper); opacity:0.9; flex:1; white-space:pre-line; }
+  .beauty-quote-text { font-family:'Playfair Display',serif; font-style:italic; font-size:1.05rem; line-height:1.5; color:var(--paper); flex:1; }
+  .beauty-quote-attr { font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.08em; color:var(--accent-light); margin-top:0.3rem; }
+
+  /* VIDEO CARDS */
+  .card.video-card::before { background: #006655; }
+  .tab-pill.video-tab { border-color:rgba(0,140,120,0.4); color:#4ecdc4; }
+  .tab-pill.video-tab.active { background:#006655; border-color:#006655; color:#fff; }
+  .video-thumb-wrap { width:100%; height:180px; overflow:hidden; flex-shrink:0; position:relative; background:#000; }
+  .video-thumb { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.3s ease; opacity:0.85; }
+  .card.video-card:hover .video-thumb { transform:scale(1.04); opacity:1; }
+  .video-play-btn {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:48px; height:48px; border-radius:50%;
+    background:rgba(0,102,85,0.85); display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem; color:#fff; pointer-events:none; transition:background 0.2s, transform 0.2s;
+  }
+  .card.video-card:hover .video-play-btn { background:#006655; transform:translate(-50%,-50%) scale(1.1); }
+  .card-badge.video { background:rgba(0,102,85,0.09); color:#006655; border-color:rgba(0,102,85,0.28); }
+
+  .tab-pill-all {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.35rem 0.8rem; border-radius: 3px;
+    border: 1px solid rgba(200,191,170,0.5); color: var(--paper);
+    background: transparent; cursor: pointer; transition: all 0.18s ease;
+    flex-shrink: 0; user-select: none;
+  }
+  .tab-pill-all:hover { border-color: var(--accent-light); background: rgba(139,32,0,0.2); }
+  .tab-pill-all.all-active { background: rgba(200,191,170,0.15); border-color: rgba(200,191,170,0.6); }
+  .masthead-actions { display: flex; align-items: center; gap: 0.5rem; }
+  .icon-btn {
+    background: none; border: 1px solid rgba(200,191,170,0.3); color: var(--paper);
+    width: 34px; height: 34px; border-radius: 4px; cursor: pointer;
+    font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .icon-btn:hover { background: rgba(139,32,0,0.4); border-color: var(--accent); }
+
+  /* TAB BAR */
+  .tab-bar-wrap {
+    background: var(--ink); border-bottom: 1px solid rgba(200,191,170,0.15);
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .tab-bar-wrap::-webkit-scrollbar { display: none; }
+  .tab-bar {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; gap: 0.3rem; padding: 0.5rem 1rem; white-space: nowrap;
+  }
+  .tab-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.35rem 0.8rem; border-radius: 3px;
+    border: 1px solid rgba(200,191,170,0.25); color: var(--rule);
+    background: transparent; cursor: pointer; transition: all 0.18s ease;
+    flex-shrink: 0; user-select: none;
+  }
+  .tab-pill:hover { border-color: var(--accent-light); color: var(--paper); }
+  .tab-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* FEED */
+  .feed-wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .feed-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule);
+  }
+  .feed-meta-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .refresh-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--rule); color: var(--muted);
+    padding: 0.3rem 0.7rem; border-radius: 3px; cursor: pointer; transition: all 0.18s;
+  }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(320px,100%),1fr));
+    gap: 1.25rem;
+  }
+
+  /* CARD */
+  .card {
+    background: #fff; border: 1px solid var(--rule); border-radius: 4px;
+    cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex; flex-direction: column; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.22s ease; z-index: 2;
+  }
+  .card:hover::before { transform: scaleX(1); }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--shadow), 0 0 0 1px rgba(139,32,0,0.15);
+  }
+
+  /* card image */
+  .card-img-wrap {
+    width: 100%; height: 160px; overflow: hidden; flex-shrink: 0; position: relative;
+    background: linear-gradient(135deg, var(--cream) 0%, #ddd6c8 100%);
+  }
+  .card-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.3s ease;
+  }
+  .card:hover .card-img-wrap img { transform: scale(1.04); }
+  .card-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-img-glyph {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem; opacity: 0.09; color: var(--ink); user-select: none;
+    line-height: 1;
+  }
+  .card-img-source {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0.6rem 0.7rem 0.35rem;
+    background: linear-gradient(transparent, rgba(20,16,12,0.72));
+    font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(245,240,232,0.88);
+  }
+
+  /* card body */
+  .card-body { padding: 1rem 1.1rem 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+  .card-tags-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem; }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.2rem 0.5rem; border-radius: 2px; color: #fff;
+  }
+  .card-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; font-weight: 600;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 0.15rem 0.4rem; border-radius: 2px;
+    background: rgba(139,32,0,0.09); color: var(--accent);
+    border: 1px solid rgba(139,32,0,0.28);
+  }
+  .card-badge.pubmed { background: rgba(0,60,100,0.09); color: #003c64; border-color: rgba(0,60,100,0.28); }
+  .card-badge.humanities { background: rgba(60,20,80,0.09); color: #3c1450; border-color: rgba(60,20,80,0.28); }
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(0.95rem,2.5vw,1.1rem);
+    font-weight: 700; line-height: 1.3; color: var(--ink); letter-spacing: -0.01em;
+  }
+  .card-extract {
+    font-family: 'Source Serif 4', serif; font-size: 0.855rem;
+    line-height: 1.62; color: #3a342e; flex: 1;
+  }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 0.2rem; padding-top: 0.55rem; border-top: 1px solid var(--cream);
+  }
+  .card-meta-col { display: flex; flex-direction: column; gap: 0.06rem; }
+  .card-readtime {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .card-byline { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; color: var(--muted); opacity: 0.75; }
+  .card-arrow {
+    font-size: 0.8rem; color: var(--accent); opacity: 0.5;
+    transition: opacity 0.15s, transform 0.15s; flex-shrink: 0;
+  }
+  .card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+
+  /* SKELETON */
+  .skeleton { background: #fff; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; pointer-events: none; }
+  .skel-img { height: 160px; }
+  .skel-body-wrap { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .skel {
+    background: linear-gradient(90deg, var(--cream) 25%, #e8e3d8 50%, var(--cream) 75%);
+    background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 3px;
+  }
+  .skel-tag{height:18px;width:72px}
+  .skel-t1{height:20px;width:92%}
+  .skel-t2{height:20px;width:60%}
+  .skel-b1{height:13px;width:100%}
+  .skel-b2{height:13px;width:85%}
+  .skel-b3{height:13px;width:68%}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+  /* LOAD MORE */
+  .load-more-wrap { text-align: center; margin-top: 2.5rem; }
+  .load-more-btn {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem;
+    background: none; border: 2px solid var(--ink); color: var(--ink);
+    padding: 0.7rem 2rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
+  }
+  .load-more-btn:hover { background: var(--ink); color: var(--paper); }
+  .load-more-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* READER */
+  .reader-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; background: var(--paper);
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.22,1,0.36,1);
+  }
+  .reader-overlay.open { transform: translateY(0); }
+  .reader-header {
+    background: var(--ink); color: var(--paper);
+    padding: 0.7rem 1rem; display: flex; align-items: center; gap: 1rem;
+    flex-shrink: 0; border-bottom: 2px solid var(--accent);
+  }
+  .reader-back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(200,191,170,0.3); color: var(--paper);
+    padding: 0.35rem 0.7rem; border-radius: 3px; cursor: pointer; white-space: nowrap;
+    flex-shrink: 0; transition: background 0.18s;
+  }
+  .reader-back:hover { background: rgba(139,32,0,0.4); }
+  .reader-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(0.85rem,2vw,1rem);
+    font-weight: 700; color: var(--paper); flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .reader-ext-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent-light); text-decoration: none; white-space: nowrap;
+    flex-shrink: 0; transition: color 0.15s;
+  }
+  .reader-ext-link:hover { color: #e86030; }
+  .reader-iframe { flex: 1; border: none; width: 100%; }
+
+  /* SETTINGS */
+  .settings-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: var(--paper); display: none; flex-direction: column; overflow: hidden;
+  }
+  .settings-overlay.open { display: flex; }
+  .settings-header {
+    background: var(--ink); color: var(--paper);
+    padding: 0.7rem 1rem; display: flex; align-items: center; gap: 1rem;
+    flex-shrink: 0; border-bottom: 2px solid var(--accent);
+  }
+  .settings-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; flex: 1; }
+  .settings-body { flex: 1; overflow-y: auto; padding: 1.5rem 1rem; max-width: 800px; margin: 0 auto; width: 100%; }
+  .settings-section-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--rule);
+  }
+  .settings-tab-row {
+    background: #fff; border: 1px solid var(--rule); border-radius: 4px;
+    padding: 1rem; margin-bottom: 0.75rem;
+  }
+  .settings-tab-name-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .settings-name-input {
+    font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
+    border: none; border-bottom: 1px solid var(--rule); background: transparent;
+    color: var(--ink); padding: 0.2rem 0.3rem; flex: 1; outline: none; transition: border-color 0.18s;
+  }
+  .settings-name-input:focus { border-color: var(--accent); }
+  .settings-cats-input {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; width: 100%;
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+    color: var(--ink); padding: 0.5rem 0.6rem; outline: none; resize: vertical;
+    min-height: 70px; line-height: 1.6; transition: border-color 0.18s;
+  }
+  .settings-cats-input:focus { border-color: var(--accent); }
+  .settings-cats-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); display: block;
+    margin-bottom: 0.3rem; margin-top: 0.5rem;
+  }
+  .delete-tab-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    background: none; border: 1px solid #ddd; color: var(--muted);
+    padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+  }
+  .delete-tab-btn:hover { border-color: #cc3333; color: #cc3333; }
+  .add-tab-section {
+    margin-top: 1.5rem; padding: 1rem;
+    background: #fff; border: 1px dashed var(--rule); border-radius: 4px;
+  }
+  .add-tab-title { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .settings-input {
+    font-family: 'Source Serif 4', serif; font-size: 0.875rem; width: 100%;
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+    color: var(--ink); padding: 0.45rem 0.6rem; outline: none;
+    margin-bottom: 0.6rem; transition: border-color 0.18s;
+  }
+  .settings-input:focus { border-color: var(--accent); }
+  .save-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--accent); border: none; color: #fff;
+    padding: 0.55rem 1.25rem; border-radius: 3px; cursor: pointer; transition: background 0.18s;
+  }
+  .save-btn:hover { background: var(--accent-light); }
+  .add-tab-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--ink); color: var(--ink);
+    padding: 0.45rem 1rem; border-radius: 3px; cursor: pointer;
+    transition: all 0.18s; margin-top: 0.5rem;
+  }
+  .add-tab-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* API KEY SECTION */
+  .api-key-section {
+    background: #fff; border: 1px solid var(--rule); border-radius: 4px;
+    padding: 1rem; margin-bottom: 1.5rem;
+  }
+  .api-key-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+  .api-key-input {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; flex: 1;
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+    color: var(--ink); padding: 0.45rem 0.6rem; outline: none; transition: border-color 0.18s;
+    letter-spacing: 0.04em;
+  }
+  .api-key-input:focus { border-color: var(--accent); }
+  .api-key-save-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--ink); border: none; color: var(--paper);
+    padding: 0.45rem 0.9rem; border-radius: 3px; cursor: pointer; transition: background 0.18s;
+    white-space: nowrap;
+  }
+  .api-key-save-btn:hover { background: var(--accent); }
+  .api-key-status {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em;
+    margin-top: 0.4rem; color: var(--muted);
+  }
+  .api-key-status.ok { color: #3a8a3a; }
+  .api-key-status.err { color: #cc3333; }
+
+  /* AI CATEGORY STATUS BANNER */
+  .ai-banner {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 0.3rem 0.6rem; background: rgba(139,32,0,0.06);
+    border: 1px solid rgba(139,32,0,0.15); border-radius: 3px;
+    display: inline-block; margin-bottom: 0.75rem;
+  }
+  /* Settings: AI categories display */
+  .ai-cats-toggle {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(139,32,0,0.2); color: var(--accent);
+    padding: 0.25rem 0.6rem; border-radius: 3px; cursor: pointer;
+    margin-top: 0.5rem; transition: all 0.15s;
+  }
+  .ai-cats-toggle:hover { background: rgba(139,32,0,0.08); }
+  .ai-cats-display {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+    color: var(--muted); line-height: 1.7; margin-top: 0.5rem;
+    padding: 0.5rem 0.6rem; background: rgba(139,32,0,0.04);
+    border: 1px solid rgba(139,32,0,0.1); border-radius: 3px;
+    max-height: 120px; overflow-y: auto;
+  }
+  .refresh-ai-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--accent); color: var(--accent);
+    padding: 0.4rem 0.9rem; border-radius: 3px; cursor: pointer; transition: all 0.18s;
+    margin-top: 0.75rem; display: inline-block;
+  }
+  .refresh-ai-btn:hover { background: var(--accent); color: #fff; }
+  .refresh-ai-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* AI PROMPT WORKSHOP */
+  .prompt-section {
+    background: #fff; border: 1px solid var(--rule); border-radius: 4px;
+    padding: 1.1rem; margin-bottom: 1rem;
+  }
+  .prompt-section-title {
+    font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 0.4rem;
+  }
+  .prompt-section-desc {
+    font-family: 'Source Serif 4', serif; font-size: 0.82rem;
+    color: var(--muted); line-height: 1.55; margin-bottom: 0.9rem;
+  }
+  .prompt-textarea {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    width: 100%; min-height: 120px; max-height: 220px; overflow-y: auto;
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+    color: var(--ink); padding: 0.6rem 0.7rem; outline: none; resize: vertical;
+    line-height: 1.6; transition: border-color 0.18s;
+  }
+  .prompt-textarea:focus { border-color: var(--accent); }
+  .prompt-textarea.paste-zone {
+    min-height: 90px; background: rgba(139,32,0,0.03);
+    border-style: dashed;
+  }
+  .prompt-textarea.paste-zone:focus { border-style: solid; border-color: var(--accent); }
+  .prompt-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
+  .prompt-copy-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--ink); border: none; color: var(--paper);
+    padding: 0.45rem 0.9rem; border-radius: 3px; cursor: pointer; transition: background 0.18s;
+  }
+  .prompt-copy-btn:hover { background: var(--accent); }
+  .prompt-apply-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--accent); color: var(--accent);
+    padding: 0.45rem 0.9rem; border-radius: 3px; cursor: pointer; transition: all 0.18s;
+  }
+  .prompt-apply-btn:hover { background: var(--accent); color: #fff; }
+  .prompt-apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .prompt-status {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.07em; color: var(--muted); margin-top: 0.5rem;
+    min-height: 1.2em;
+  }
+  .prompt-status.ok { color: #3a8a3a; }
+  .prompt-status.err { color: #cc3333; }
+  .prompt-status.warn { color: #b87000; }
+  .verify-row {
+    display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: var(--muted);
+  }
+  .verify-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--rule);
+    flex-shrink: 0; transition: background 0.3s;
+  }
+  .verify-dot.ok { background: #3a8a3a; }
+  .verify-dot.err { background: #cc3333; }
+  .verify-dot.checking { background: #e8a000; animation: pulse 1s infinite; }
+
+  /* HUMANITIES TOPIC SECTION */
+  .humanities-topics-section { margin-top: 0.75rem; }
+  .humanities-topic-row {
+    display: flex; gap: 0.5rem; align-items: center;
+    padding: 0.4rem 0; border-bottom: 1px solid var(--cream);
+  }
+  .humanities-topic-name {
+    font-family: 'Source Serif 4', serif; font-size: 0.85rem; flex: 1; color: var(--ink);
+  }
+  .remove-topic-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+    background: none; border: 1px solid #ddd; color: var(--muted);
+    padding: 0.2rem 0.4rem; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+  }
+  .remove-topic-btn:hover { border-color: #cc3333; color: #cc3333; }
+  .add-topic-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+  .topic-input {
+    font-family: 'Source Serif 4', serif; font-size: 0.85rem; flex: 1;
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+    color: var(--ink); padding: 0.4rem 0.6rem; outline: none; transition: border-color 0.18s;
+  }
+  .topic-input:focus { border-color: var(--accent); }
+  .add-topic-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    background: none; border: 1px solid var(--ink); color: var(--ink);
+    padding: 0.4rem 0.8rem; border-radius: 3px; cursor: pointer; transition: all 0.18s;
+  }
+  .add-topic-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 4rem 1rem; color: var(--muted); }
+  .empty-state p { font-style: italic; font-size: 1rem; }
+
+  @media (max-width: 600px) {
+    .masthead-tagline { display: none; }
+    .quote-banner { display: block; }
+    .feed-wrap { padding: 1rem 0.75rem 3rem; }
+    .card-img-wrap { height: 130px; }
+    .skel-img { height: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-left">
+      <span class="status-dot" id="statusDot"></span>
+      <div>
+        <div class="masthead-title">The Stacks</div>
+        <span class="masthead-date" id="mastheadDate"></span>
+      </div>
+    </div>
+    <div class="masthead-tagline">
+      <span class="masthead-subtitle">Andrew's Library</span>
+      <span class="masthead-quote" id="mastheadQuote"></span>
+      <span class="masthead-quote-attr" id="mastheadQuoteAttr"></span>
+    </div>
+    <div class="masthead-actions">
+      <button class="icon-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Shakespeare banner -->
+<div class="quote-banner" id="quoteBanner">
+  <div class="quote-banner-text" id="quoteBannerText"></div>
+  <span class="quote-banner-attr" id="quoteBannerAttr"></span>
+</div>
+
+<nav class="tab-bar-wrap">
+  <div class="tab-bar" id="tabBar"></div>
+</nav>
+
+<main class="feed-wrap">
+  <div class="feed-meta">
+    <span class="feed-meta-label" id="feedLabel">Loading articles…</span>
+    <button class="refresh-btn" id="refreshBtn">↺ Refresh</button>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+  <div class="load-more-wrap">
+    <button class="load-more-btn" id="loadMoreBtn">Load more articles</button>
+  </div>
+</main>
+
+<div class="reader-overlay" id="readerOverlay">
+  <div class="reader-header">
+    <button class="reader-back" id="readerBack">← Feed</button>
+    <div class="reader-title" id="readerTitle"></div>
+    <a class="reader-ext-link" id="readerExtLink" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+  <iframe class="reader-iframe" id="readerIframe"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-presentation"></iframe>
+</div>
+
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-header">
+    <button class="reader-back" id="settingsClose">← Back</button>
+    <div class="settings-title">Settings</div>
+    <button class="save-btn" id="saveSettingsBtn">Save Changes</button>
+  </div>
+  <div class="settings-body" id="settingsBody"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// SHAKESPEARE QUOTES — curated pool, one per session
+// ─────────────────────────────────────────────────────────────────────────────
+const SHAKESPEARE_QUOTES = [
+  { q: "What a piece of work is a man!", s: "Hamlet, II.ii" },
+  { q: "All the world's a stage, and all the men and women merely players.", s: "As You Like It, II.vii" },
+  { q: "We know what we are, but know not what we may be.", s: "Hamlet, IV.v" },
+  { q: "The robbed that smiles, steals something from the thief.", s: "Othello, I.iii" },
+  { q: "Our doubts are traitors, and make us lose the good we oft might win, by fearing to attempt.", s: "Measure for Measure, I.iv" },
+  { q: "How sharper than a serpent's tooth it is to have a thankless child!", s: "King Lear, I.iv" },
+  { q: "The course of true love never did run smooth.", s: "A Midsummer Night's Dream, I.i" },
+  { q: "What's in a name? That which we call a rose by any other name would smell as sweet.", s: "Romeo and Juliet, II.ii" },
+  { q: "To thine own self be true.", s: "Hamlet, I.iii" },
+  { q: "Cowards die many times before their deaths; the valiant never taste of death but once.", s: "Julius Caesar, II.ii" },
+  { q: "The quality of mercy is not strained. It droppeth as the gentle rain from heaven.", s: "The Merchant of Venice, IV.i" },
+  { q: "There is nothing either good or bad, but thinking makes it so.", s: "Hamlet, II.ii" },
+  { q: "Give every man thy ear, but few thy voice.", s: "Hamlet, I.iii" },
+  { q: "Men at some time are masters of their fates. The fault, dear Brutus, is not in our stars, but in ourselves.", s: "Julius Caesar, I.ii" },
+  { q: "Uneasy lies the head that wears a crown.", s: "Henry IV Part 2, III.i" },
+  { q: "If music be the food of love, play on.", s: "Twelfth Night, I.i" },
+  { q: "We are such stuff as dreams are made on, and our little life is rounded with a sleep.", s: "The Tempest, IV.i" },
+  { q: "The lady doth protest too much, methinks.", s: "Hamlet, III.ii" },
+  { q: "All that glitters is not gold.", s: "The Merchant of Venice, II.vii" },
+  { q: "Full fathom five thy father lies; of his bones are coral made.", s: "The Tempest, I.ii" },
+  { q: "Brevity is the soul of wit.", s: "Hamlet, II.ii" },
+  { q: "This above all: to thine own self be true.", s: "Hamlet, I.iii" },
+  { q: "What is past is prologue.", s: "The Tempest, II.i" },
+  { q: "How beauteous mankind is! O brave new world that has such people in't.", s: "The Tempest, V.i" },
+  { q: "The miserable have no other medicine but only hope.", s: "Measure for Measure, III.i" },
+  { q: "Love all, trust a few, do wrong to none.", s: "All's Well That Ends Well, I.i" },
+  { q: "There are more things in heaven and earth, Horatio, than are dreamt of in your philosophy.", s: "Hamlet, I.v" },
+  { q: "Once more unto the breach, dear friends, once more.", s: "Henry V, III.i" },
+  { q: "Cry havoc and let slip the dogs of war.", s: "Julius Caesar, III.i" },
+  { q: "The better part of valour is discretion.", s: "Henry IV Part 1, V.iv" },
+  { q: "All's well that ends well.", s: "All's Well That Ends Well, IV.iv" },
+  { q: "Nothing will come of nothing.", s: "King Lear, I.i" },
+  { q: "What a tangled web — but that is Spenser, not the Bard. Stars, hide your fires; let not light see my black and deep desires.", s: "Macbeth, I.iv" },
+  { q: "Out, out, brief candle! Life's but a walking shadow, a poor player that struts and frets his hour upon the stage.", s: "Macbeth, V.v" },
+  { q: "The wheel is come full circle.", s: "King Lear, V.iii" },
+  { q: "Journeys end in lovers meeting, every wise man's son doth know.", s: "Twelfth Night, II.iii" },
+  { q: "Some are born great, some achieve greatness, and some have greatness thrust upon them.", s: "Twelfth Night, II.v" },
+  { q: "Good night, good night! Parting is such sweet sorrow.", s: "Romeo and Juliet, II.ii" },
+  { q: "We are time's subjects, and time bids be gone.", s: "Henry IV Part 2, I.iii" },
+  { q: "Golden lads and girls all must, as chimney-sweepers, come to dust.", s: "Cymbeline, IV.ii" },
+];
+
+function setSessionQuote() {
+  const q = SHAKESPEARE_QUOTES[Math.floor(Math.random() * SHAKESPEARE_QUOTES.length)];
+  const text = '\u201c' + q.q + '\u201d';
+  const attr = '— ' + q.s;
+  const el = document.getElementById('mastheadQuote');
+  const attrEl = document.getElementById('mastheadQuoteAttr');
+  if (el) el.textContent = text;
+  if (attrEl) attrEl.textContent = attr;
+  // Also populate mobile banner
+  const bt = document.getElementById('quoteBannerText');
+  const ba = document.getElementById('quoteBannerAttr');
+  if (bt) bt.textContent = text;
+  if (ba) ba.textContent = attr;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SEEN-TITLES VARIETY LOG — prevents repeat articles across sessions
+// ─────────────────────────────────────────────────────────────────────────────
+const SEEN_LOG_KEY = 'stacks_seen_titles';
+const SEEN_MAX = 300;
+
+function loadSeenTitles() {
+  try { return new Set(JSON.parse(localStorage.getItem(SEEN_LOG_KEY) || '[]')); }
+  catch(e) { return new Set(); }
+}
+
+function saveSeenTitles(set) {
+  const arr = [...set];
+  // Keep only the most recent SEEN_MAX entries
+  localStorage.setItem(SEEN_LOG_KEY, JSON.stringify(arr.slice(-SEEN_MAX)));
+}
+
+function recordSeenArticles(batch) {
+  const seen = loadSeenTitles();
+  batch.forEach(a => seen.add(a.title));
+  saveSeenTitles(seen);
+}
+
+function filterSeen(candidates) {
+  const seen = loadSeenTitles();
+  return candidates.filter(a => !seen.has(a.title));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RSS SOURCES — audited free/open-access only, recency-sorted after fetch
+// ─────────────────────────────────────────────────────────────────────────────
+const CORS_PROXY = 'https://corsproxy.io/?url=';
+
+const RSS_SOURCES = [
+  // Longform / intellectual — fully free
+  { name:'Aeon', url:'https://aeon.co/feed.rss', tabIds:['philosophy','arts','history','science','economics'], color:'#2a0a4a' },
+  { name:'Nautilus', url:'https://nautil.us/feed/', tabIds:['science','philosophy','astronomy'], color:'#003a3a' },
+  { name:'The Conversation', url:'https://theconversation.com/us/articles.atom', tabIds:['politics','science','history','economics'], color:'#003355' },
+  { name:'JSTOR Daily', url:'https://daily.jstor.org/feed/', tabIds:['history','arts','economics','philosophy','politics'], color:'#3a1400' },
+  { name:'The Public Domain Review', url:'https://publicdomainreview.org/rss.xml', tabIds:['arts','history','philosophy'], color:'#1a0a2a' },
+  { name:'Open Culture', url:'https://feeds.feedburner.com/OpenCulture', tabIds:['arts','history','philosophy','science'], color:'#1a1a3a' },
+  { name:'Smithsonian Magazine', url:'https://www.smithsonianmag.com/rss/latest_articles/', tabIds:['history','science','arts'], color:'#1a2800' },
+  { name:'History Today', url:'https://www.historytoday.com/feed', tabIds:['history','arts'], color:'#3a0000' },
+  // Science — free
+  { name:'Quanta Magazine', url:'https://api.quantamagazine.org/feed/', tabIds:['science','astronomy'], color:'#002244' },
+  { name:'MIT Technology Review', url:'https://www.technologyreview.com/feed/', tabIds:['science','economics'], color:'#001a3a' },
+  { name:'Science Daily', url:'https://www.sciencedaily.com/rss/all.xml', tabIds:['science','astronomy'], color:'#001a2a' },
+  { name:'PLOS Biology', url:'https://journals.plos.org/plosbiology/feed/atom', tabIds:['science'], color:'#002a1a' },
+  // Politics / current affairs — free
+  { name:'Bellingcat', url:'https://www.bellingcat.com/feed/', tabIds:['politics','history'], color:'#1a2a1a' },
+  { name:'War on the Rocks', url:'https://warontherocks.com/feed/', tabIds:['politics','history'], color:'#1a0a00' },
+  { name:'Al Jazeera English', url:'https://www.aljazeera.com/xml/rss/all.xml', tabIds:['politics','history'], color:'#00241a' },
+  { name:'The Wire', url:'https://thewire.in/rss/top', tabIds:['politics','economics','history'], color:'#001a10' },
+  // Economics — free
+  { name:'Econofact', url:'https://econofact.org/feed', tabIds:['economics','politics'], color:'#001a2a' },
+  { name:'VoxEU', url:'https://feeds.feedburner.com/voxeu/all', tabIds:['economics'], color:'#001020' },
+  // Astronomy / Space — free
+  { name:'NASA News', url:'https://www.nasa.gov/news-release/feed/', tabIds:['astronomy','spaceflight'], color:'#0b3d91' },
+  { name:'Sky & Telescope', url:'https://skyandtelescope.org/feed/', tabIds:['astronomy'], color:'#0a0a2a' },
+  { name:'The Planetary Society', url:'https://www.planetary.org/feeds/rss/articles', tabIds:['spaceflight','astronomy'], color:'#1a0a3a' },
+  { name:'SpaceNews', url:'https://spacenews.com/feed/', tabIds:['spaceflight'], color:'#0a1a0a' },
+  { name:'ESA Space Science', url:'https://www.esa.int/rssfeed/Our_Activities/Space_Science', tabIds:['spaceflight','astronomy'], color:'#002255' },
+  { name:'Astrobiology Magazine', url:'https://www.astrobio.net/feed/', tabIds:['astronomy','science'], color:'#0a1a1a' },
+  // Philosophy — free
+  { name:'Notre Dame Philosophical Reviews', url:'https://ndpr.nd.edu/feed/', tabIds:['philosophy'], color:'#1a1a3a' },
+  { name:'Church Life Journal', url:'https://churchlifejournal.nd.edu/feed/', tabIds:['philosophy'], color:'#1a0a1a' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HUMANITIES JOURNAL RSS SOURCES (open access)
+// ─────────────────────────────────────────────────────────────────────────────
+const HUMANITIES_RSS_SOURCES = [
+  { name:'JSTOR Daily', url:'https://daily.jstor.org/feed/', color:'#3a1400' },
+  { name:'Aeon', url:'https://aeon.co/feed.rss', color:'#2a0a4a' },
+  { name:'LA Review of Books', url:'https://lareviewofbooks.org/feed/', color:'#2a1a00' },
+  { name:'History Today', url:'https://www.historytoday.com/feed', color:'#3a0000' },
+  { name:'The Public Domain Review', url:'https://publicdomainreview.org/rss.xml', color:'#1a0a2a' },
+  { name:'Open Culture', url:'https://feeds.feedburner.com/OpenCulture', color:'#1a1a3a' },
+  { name:'Smithsonian Magazine', url:'https://www.smithsonianmag.com/rss/latest_articles/', color:'#1a2800' },
+  { name:'Notre Dame Philosophical Reviews', url:'https://ndpr.nd.edu/feed/', color:'#1a1a3a' },
+  { name:'Church Life Journal', url:'https://churchlifejournal.nd.edu/feed/', color:'#1a0a1a' },
+];
+
+// PubMed clinical keyword search terms
+const PUBMED_SEARCH_TERMS = [
+  'intensive care unit management',
+  'mechanical ventilation ICU',
+  'sepsis pathophysiology treatment',
+  'acute kidney injury nephrology',
+  'renal replacement therapy',
+  'cardiac physiology heart failure',
+  'cardiology intervention outcomes',
+  'myocardial infarction mechanisms',
+  'immunology inflammation signaling',
+  'cytokine storm immunopathology',
+  'T cell B cell adaptive immunity',
+  'respiratory physiology ARDS',
+  'fluid resuscitation hemodynamics',
+  'vasopressor shock management',
+  'electrolyte disorders physiology',
+  'acid base balance critical care',
+  'neurological critical care',
+  'coagulation thrombosis pathophysiology',
+  'transplant immunology rejection',
+  'endocrinology critical illness',
+  'pharmacology drug mechanisms',
+  'diagnostic reasoning clinical medicine',
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// YOUTUBE CHANNELS — AI-refreshed weekly, curated defaults as fallback
+// ─────────────────────────────────────────────────────────────────────────────
+const YOUTUBE_CHANNEL_IDS_KEY = 'stacks_yt_channels_v1';
+const YOUTUBE_CHANNEL_WEEK_KEY = 'stacks_yt_week';
+const DEFAULT_YT_CHANNELS = [
+  { id:'UCoxcjq-8xIDTYp3uz647V5A', name:'Numberphile' },
+  { id:'UCYO_jab_esuFRV4b17AJtAg', name:'3Blue1Brown' },
+  { id:'UCHnyfMqiRRG1u-2MsSQLbXA', name:'Veritasium' },
+  { id:'UCZYTClx2T1of7BRZ86-8fow', name:'SciShow' },
+  { id:'UCsXVk37bltHxD1rDPwtNM8Q', name:'Kurzgesagt' },
+  { id:'UC9-y-6csu5WGm29I7JiwpnA', name:'CGP Grey' },
+  { id:'UCpCSAcbqs-sjEVfk_hMfY9w', name:'History Matters' },
+  { id:'UCsooa4yRKGN_zEE8iknghZA', name:'TED-Ed' },
+  { id:'UCEIwxahdLz7bap-VDs9h35A', name:'Steve Mould' },
+  { id:'UCnUYZLuoy1rq1aVMwx4aTzw', name:'Wendover Productions' },
+  { id:'UCG-KntY7aVnIGXYEBQvmBAQ', name:'Practical Engineering' },
+  { id:'UCeiYXex_fwgYDonaTcSIk6w', name:'Smarter Every Day' },
+  { id:'UCwmFOfFuvRPI112vR5DNnrA', name:'History Hit' },
+  { id:'UC22BdTgxefuvUivrjesETjg', name:'PBS Space Time' },
+  { id:'UCJXGnMFzSaHOhOGiA4bKhbA', name:'Isaac Arthur' },
+  { id:'UCznv7Vf9nBdJYvBagFdAHWw', name:'Computerphile' },
+  { id:'UCivA7_KLKWo43tFcCkFvydA', name:'Overly Sarcastic Productions' },
+  { id:'UCbfYPyITQ-7l4upoX8nvctg', name:'Two Cents' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BEAUTY TILE CONTENT
+// ─────────────────────────────────────────────────────────────────────────────
+const BEAUTY_QUOTES = [
+  { q:"The unexamined life is not worth living.", a:"Socrates" },
+  { q:"He who has a why to live can bear almost any how.", a:"Friedrich Nietzsche" },
+  { q:"Wonder is the beginning of wisdom.", a:"Socrates" },
+  { q:"A room without books is like a body without a soul.", a:"Marcus Tullius Cicero" },
+  { q:"Not all those who wander are lost.", a:"J.R.R. Tolkien" },
+  { q:"The only true wisdom is in knowing you know nothing.", a:"Socrates" },
+  { q:"Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.", a:"Rumi" },
+  { q:"Out beyond ideas of wrongdoing and rightdoing, there is a field. I'll meet you there.", a:"Rumi" },
+  { q:"The eye through which I see God is the same eye through which God sees me.", a:"Meister Eckhart" },
+  { q:"All shall be well, and all shall be well, and all manner of thing shall be well.", a:"Julian of Norwich" },
+  { q:"The longest journey is the journey inward.", a:"Dag Hammarsk\u00f6ld" },
+  { q:"I am large, I contain multitudes.", a:"Walt Whitman" },
+  { q:"We shall not cease from exploration, and the end of all our exploring will be to arrive where we started.", a:"T.S. Eliot" },
+  { q:"He who fights with monsters should look to it that he himself does not become a monster.", a:"Friedrich Nietzsche" },
+  { q:"There is nothing permanent except change.", a:"Heraclitus" },
+  { q:"I think, therefore I am.", a:"Ren\u00e9 Descartes" },
+  { q:"Man is condemned to be free.", a:"Jean-Paul Sartre" },
+  { q:"Imagination is more important than knowledge.", a:"Albert Einstein" },
+  { q:"The quieter you become, the more you are able to hear.", a:"Rumi" },
+  { q:"In the beginning was the Word, and the Word was with God, and the Word was God.", a:"John 1:1" },
+  { q:"The world is a book, and those who do not travel read only one page.", a:"St. Augustine" },
+  { q:"Knowing others is intelligence; knowing yourself is true wisdom.", a:"Lao Tzu" },
+  { q:"To read without reflecting is like eating without digesting.", a:"Edmund Burke" },
+  { q:"I have never met a man so ignorant that I couldn't learn something from him.", a:"Galileo Galilei" },
+  { q:"The cradle rocks above an abyss, and common sense tells us that our existence is but a brief crack of light between two eternities of darkness.", a:"Vladimir Nabokov" },
+];
+
+const BEAUTY_POEMS = [
+  { lines:"Do not go gentle into that good night,\nOld age should burn and rave at close of day;\nRage, rage against the dying of the light.", a:"Dylan Thomas" },
+  { lines:"Two roads diverged in a wood, and I\u2014\nI took the one less traveled by,\nAnd that has made all the difference.", a:"Robert Frost" },
+  { lines:"I carry your heart with me (I carry it in\nmy heart) I am never without it.", a:"E.E. Cummings" },
+  { lines:"Hope is the thing with feathers\nThat perches in the soul,\nAnd sings the tune without the words,\nAnd never stops at all.", a:"Emily Dickinson" },
+  { lines:"I am the master of my fate,\nI am the captain of my soul.", a:"William Ernest Henley, Invictus" },
+  { lines:"Season of mists and mellow fruitfulness,\nClose bosom-friend of the maturing sun;\nConspiring with him how to load and bless\nWith fruit the vines that round the thatch-eaves run.", a:"John Keats, To Autumn" },
+  { lines:"Water, water, every where,\nNor any drop to drink.", a:"S.T. Coleridge, The Ancient Mariner" },
+  { lines:"Because I could not stop for Death,\nHe kindly stopped for me;\nThe carriage held but just ourselves\nAnd Immortality.", a:"Emily Dickinson" },
+];
+
+const NASA_DEMO_KEY = 'DEMO_KEY';
+const apodCache = [];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFAULT TABS
+// ─────────────────────────────────────────────────────────────────────────────
+const DEFAULT_TABS = [
+  {
+    id: 'history', name: 'History', color: '#5a1e00',
+    categories: [
+      'Battles_by_country','Sieges','Naval_battles','Military_operations',
+      'Colonial_wars','Rebellions','Famines','Epidemics_in_history',
+      'Expeditions','Trade_routes','Assassinations','Massacres',
+      'Coups_d\'%C3%A9tat','Raids','Revolts','Mutinies',
+      'History_of_Indonesia','History_of_Vietnam','History_of_the_Philippines',
+      'History_of_Burma','History_of_Malaya','History_of_Cambodia',
+      'History_of_Thailand','History_of_Korea','History_of_Japan',
+      'History_of_Egypt','History_of_Nigeria','History_of_Ethiopia',
+      'History_of_Ghana','History_of_Senegal','History_of_Zimbabwe',
+      'History_of_Angola','History_of_Sudan','History_of_Mali',
+      'History_of_Persia','History_of_the_Ottoman_Empire','History_of_Morocco',
+      'History_of_India','History_of_Ceylon','History_of_China',
+      'World_War_II_in_Asia','World_War_II_in_Africa',
+      'Decolonisation_of_Asia','Decolonisation_of_Africa',
+      'Cold_War_conflicts','2020s_conflicts','2020s_in_history','2010s_conflicts'
+    ]
+  },
+  {
+    id: 'science', name: 'Science & Tech', color: '#003a5a',
+    categories: [
+      'Subatomic_particles','Galaxies','Exoplanets','Supernovae','Black_holes',
+      'Chemical_compounds','Enzymes','Proteins','Viruses','Bacteria',
+      'Genetic_disorders','Syndromes','Neurological_conditions',
+      'Mathematical_theorems','Algorithms','Programming_languages',
+      'Geological_formations','Minerals','Fossils',
+      'Ecosystems','Endangered_species','Invasive_species',
+      'Scientific_instruments','Telescopes','Space_probes','Spacecraft',
+      'Climate_phenomena','Ocean_currents','Atmospheric_phenomena',
+      'Paleontology','Paleoclimatology','Biochemistry',
+      '2020s_in_science','2020s_in_technology'
+    ]
+  },
+  {
+    id: 'politics', name: 'Global Politics', color: '#1a3a1a',
+    categories: [
+      'Political_crises','Territorial_disputes','Separatist_movements',
+      'Armed_conflicts_by_country','Insurgencies','Peace_treaties',
+      'Military_alliances','Sanctions','International_incidents',
+      'Color_revolutions','Arab_Spring',
+      'Post-Cold_War_conflicts','Cold_War_conflicts',
+      'Elections_by_country','Referendums',
+      'Politics_of_Southeast_Asia','Politics_of_the_Middle_East',
+      'Politics_of_Africa','Politics_of_South_Asia',
+      'Politics_of_East_Asia','Politics_of_Latin_America',
+      '2020s_in_politics','2024_in_politics',
+      '2023_in_international_relations','2024_in_international_relations',
+      'Current_events','Ongoing_armed_conflicts',
+      '2020s_elections','2024_elections'
+    ]
+  },
+  {
+    id: 'philosophy', name: 'Philosophy & Religion', color: '#3a1a3a',
+    categories: [
+      'Philosophical_concepts','Thought_experiments','Philosophical_arguments',
+      'Philosophical_movements','Ethics','Epistemology','Metaphysics',
+      'Philosophy_of_mind','Philosophy_of_religion','Logic',
+      'Existentialism','Phenomenology','Analytic_philosophy',
+      'Religious_texts','Religious_rituals','Religious_movements',
+      'Buddhist_philosophy','Islamic_theology','Jewish_philosophy',
+      'Hindu_philosophy','Mysticism','Gnosticism','Heresy',
+      'Comparative_religion','Theology','Secularism','Atheism'
+    ]
+  },
+  {
+    id: 'arts', name: 'Literature & Arts', color: '#2a1a00',
+    categories: [
+      'Novels_by_country','Short_story_collections','Poetry_collections',
+      'Literary_movements','Plays','Screenplays',
+      'Art_movements','Painting','Sculpture','Photography',
+      'Architectural_styles','Buildings_and_structures',
+      'Musical_genres','Music_compositions','Opera','Folk_music',
+      'Film_movements','Documentary_films',
+      'Mythology','Folklore_by_region','Legends','Fables',
+      'Cultural_history','Oral_traditions','Illuminated_manuscripts'
+    ]
+  },
+  {
+    id: 'economics', name: 'Economics', color: '#001a2a',
+    categories: [
+      'Economic_history_by_country','Financial_crises','Market_crashes',
+      'Trade_agreements','Economic_sanctions','Hyperinflation',
+      'Economic_development_in_Africa','Asian_economic_history',
+      'Globalization','International_trade',
+      'Labor_movements','Strikes','Economic_inequality',
+      'Monetary_policy','Central_banks','Currencies',
+      'Industries_by_country','Commodities','Natural_resources',
+      '2020s_economic_history','2020s_in_economics'
+    ]
+  },
+  {
+    id: 'astronomy', name: 'Astronomy', color: '#0a0a2a',
+    categories: [
+      // Objects & phenomena
+      'Galaxies','Galaxy_clusters','Nebulae','Supernovae','Neutron_stars',
+      'Black_holes','White_dwarfs','Brown_dwarfs','Variable_stars','Binary_stars',
+      'Exoplanets','Exoplanet_detection_methods','Planetary_systems',
+      'Asteroids','Comets','Meteorites','Trans-Neptunian_objects','Dwarf_planets',
+      // Cosmology
+      'Physical_cosmology','Dark_matter','Dark_energy','Cosmic_microwave_background',
+      'Big_Bang','Inflation_(cosmology)','Large-scale_structure_of_the_universe',
+      'Gravitational_waves','Gravitational_lensing',
+      // Stars & stellar
+      'Stellar_evolution','Star_formation','Stellar_classification',
+      'Supergiants','Protostars','Planetary_nebulae','Globular_clusters','Open_clusters',
+      // Observational
+      'Radio_astronomy','X-ray_astronomy','Gamma-ray_astronomy','Infrared_astronomy',
+      'Observatories','Space_telescopes','Astronomical_surveys',
+      // Solar system
+      'Moons_of_Jupiter','Moons_of_Saturn','Planetary_geology',
+      'Solar_phenomena','Heliosphere','Magnetospheres',
+      // History & theory
+      'History_of_astronomy','Astronomers','Astrophysics','Astrochemistry',
+      'Astrobiology','Fermi_paradox','SETI'
+    ]
+  },
+  {
+    id: 'spaceflight', name: 'Space Travel', color: '#0a1a0a',
+    categories: [
+      // Programs & missions
+      'Space_exploration','Human_spaceflight','Uncrewed_spacecraft',
+      'Apollo_program','Space_Shuttle_program','Soviet_space_program',
+      'Mars_missions','Lunar_missions','Jupiter_missions','Saturn_missions',
+      'Voyager_program','Pioneer_program','New_Horizons','Cassini–Huygens',
+      'Mars_rovers','Lunar_rovers',
+      // Spacecraft & rockets
+      'Spacecraft','Launch_vehicles','Rockets','Reusable_launch_systems',
+      'Space_stations','Satellites','Space_probes',
+      'SpaceX','Boeing_space_vehicles','Roscosmos','ISRO','CNSA',
+      // Astronauts & history
+      'Astronauts','Cosmonauts','Spacewalks',
+      'History_of_spaceflight','Space_race','Cold_War_space_race',
+      'NASA','ESA','JAXA',
+      // Technology & future
+      'Spacecraft_propulsion','Ion_drives','Nuclear_propulsion',
+      'Space_colonization','Mars_colonization','Lunar_bases',
+      'Space_suits','Life_support_systems','Orbital_mechanics',
+      'Space_debris','Lagrange_points','Space_tourism',
+      // Incidents
+      'Spaceflight_disasters','Space_accidents_and_incidents'
+    ]
+  },
+  {
+    id: 'medical', name: 'Medical Science', color: '#003c64',
+    categories: [], // PubMed tab — categories unused
+    tabType: 'pubmed'
+  },
+  {
+    id: 'humanities', name: 'Humanities Journals', color: '#3c1450',
+    categories: [],
+    tabType: 'humanities',
+    topics: ['Shakespeare','Enlightenment philosophy','Christian theology','Medieval scholasticism']
+  },
+  {
+    id: 'video', name: 'Deep Dive Video', color: '#006655',
+    categories: [], tabType: 'video'
+  }
+];
+
+const RECENT_CATS = new Set([
+  '2020s_conflicts','2020s_in_history','2010s_conflicts',
+  '2020s_in_politics','2024_in_politics',
+  '2023_in_international_relations','2024_in_international_relations',
+  'Current_events','Ongoing_armed_conflicts',
+  '2020s_elections','2024_elections',
+  '2020s_in_science','2020s_in_technology',
+  '2020s_economic_history','2020s_in_economics'
+]);
+
+const TAB_GLYPHS = {
+  history:'⚔', science:'⚛', politics:'⚖',
+  philosophy:'φ', arts:'✦', economics:'₿',
+  astronomy:'★', spaceflight:'🚀',
+  medical:'⚕', humanities:'✒', video:'▶'
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let tabs = [];
+let activeTabs = new Set();
+let articles = [];
+let isLoading = false;
+const rssCache = {};
+const pubmedCache = { items: [], fetched: false };
+const ytCache = { items: [], fetched: false };
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('stacks_tabs_v5');
+    tabs = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_TABS));
+    ['medical','humanities','astronomy','spaceflight','video'].forEach(id => {
+      if (!tabs.find(t => t.id === id)) {
+        const def = DEFAULT_TABS.find(t => t.id === id);
+        if (def) tabs.push(JSON.parse(JSON.stringify(def)));
+      }
+    });
+    const sa = localStorage.getItem('stacks_active_v5');
+    activeTabs = sa
+      ? new Set(JSON.parse(sa).filter(id => tabs.some(t => t.id === id)))
+      : new Set();
+    if (!activeTabs.size && tabs.length) activeTabs.add(tabs[0].id);
+    // Rehydrate AI categories from cache so they survive page reloads
+    const aiCached = localStorage.getItem('stacks_ai_cats_v1');
+    if (aiCached) {
+      try { applyAICategories(JSON.parse(aiCached).cats); } catch(e) {}
+    }
+  } catch(e) {
+    tabs = JSON.parse(JSON.stringify(DEFAULT_TABS));
+    activeTabs = new Set([tabs[0].id]);
+  }
+}
+
+function saveState() {
+  localStorage.setItem('stacks_tabs_v5', JSON.stringify(tabs));
+  localStorage.setItem('stacks_active_v5', JSON.stringify([...activeTabs]));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// API KEY — stored in localStorage
+// ─────────────────────────────────────────────────────────────────────────────
+function getApiKey() { return localStorage.getItem('stacks_anthropic_key') || ''; }
+function saveApiKey(k) { localStorage.setItem('stacks_anthropic_key', k.trim()); }
+function getYtApiKey() { return localStorage.getItem('stacks_yt_api_key') || ''; }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CATEGORY EXPANSION — discovers real Wikipedia categories via Wikipedia API
+// No external API key needed. Uses Wikipedia's own category search.
+// ─────────────────────────────────────────────────────────────────────────────
+function todayKey() { return new Date().toISOString().slice(0,10); }
+function thisWeekKey() {
+  const d = new Date(), day = d.getDay();
+  const mon = new Date(d); mon.setDate(d.getDate() - (day===0?6:day-1));
+  return mon.toISOString().slice(0,10);
+}
+
+// Seed search terms per tab — used to discover related Wikipedia categories
+const TAB_SEARCH_SEEDS = {
+  history:    ['Military history','Colonial history','Ancient civilizations','Revolutions','Empires','Sieges','Rebellions','Dynasties','Conquests'],
+  science:    ['Particle physics','Molecular biology','Neuroscience','Climate science','Quantum mechanics','Evolutionary biology','Geology'],
+  politics:   ['Geopolitics','International relations','Civil wars','Diplomacy','Political movements','Coups','Insurgencies','Sanctions'],
+  philosophy: ['Ethics','Metaphysics','Epistemology','Philosophy of religion','Buddhist philosophy','Existentialism','Mysticism'],
+  arts:       ['Literary movements','Art history','Mythology','Folk music','Architecture','Poetry','Film history','Oral traditions'],
+  economics:  ['Economic history','Financial crises','Trade history','Labor history','Monetary policy','Colonialism economics'],
+  astronomy:  ['Galaxies','Stellar evolution','Cosmology','Exoplanets','Space telescopes','Astrophysics','Dark matter'],
+  spaceflight:['Space missions','Rockets','Astronauts','Space stations','Mars exploration','Lunar missions','Space technology'],
+};
+
+// Search Wikipedia for real category names matching a seed term
+async function searchWikiCategories(seed) {
+  try {
+    const url = `https://en.wikipedia.org/w/api.php?action=query&list=allcategories`
+      + `&acprefix=${encodeURIComponent(seed)}&aclimit=15&format=json&origin=*`;
+    const data = await (await fetch(url)).json();
+    return (data?.query?.allcategories || [])
+      .map(c => (c['*'] || c).replace(/\s+/g,'_'))
+      .filter(c => c.length > 5 && c.length < 60
+        && !/^(Wikipedia|Template|Portal|Help|File|Category_talk)/i.test(c));
+  } catch(e) { return []; }
+}
+
+async function refreshAICategories() {
+  const stored = localStorage.getItem('stacks_ai_cats_v1');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (parsed.date === todayKey()) { applyAICategories(parsed.cats); return; }
+    } catch(e) {}
+  }
+
+  console.log('[Stacks] Discovering Wikipedia categories…');
+  const wikiTabs = tabs.filter(t => !t.tabType);
+  const cats = {};
+
+  await Promise.allSettled(wikiTabs.map(async tab => {
+    const seeds = TAB_SEARCH_SEEDS[tab.id] || [tab.name];
+    // Pick 4 random seeds and search all simultaneously
+    const chosen = seeds.sort(() => Math.random()-0.5).slice(0, 4);
+    const results = await Promise.allSettled(chosen.map(s => searchWikiCategories(s)));
+    const found = results
+      .flatMap(r => r.status === 'fulfilled' ? r.value : [])
+      .filter(c => !tab.categories.includes(c));
+    const unique = [...new Set(found)];
+    if (unique.length) cats[tab.id] = unique;
+  }));
+
+  localStorage.setItem('stacks_ai_cats_v1', JSON.stringify({ date: todayKey(), cats }));
+  applyAICategories(cats);
+  console.log('[Stacks] Wikipedia categories discovered:', Object.keys(cats).length, 'tabs');
+}
+
+function applyAICategories(cats) {
+  tabs.forEach(tab => {
+    if (tab.tabType) return;
+    const aiCats = cats[tab.id];
+    if (!Array.isArray(aiCats)) return;
+    tab._aiCategories = aiCats;
+    tab._mergedCategories = [...new Set([...tab.categories, ...aiCats])];
+  });
+}
+
+// 70% draw from AI-generated categories when available
+function getEffectiveCategories(tab) {
+  if (tab._aiCategories?.length && Math.random() < 0.7) return tab._aiCategories;
+  return tab._mergedCategories || tab.categories;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// YOUTUBE — keyword search via YouTube Data API v3
+// Keywords are drawn from AI-generated categories for all wiki tabs,
+// so no extra AI calls needed — we reuse what we already have.
+// ─────────────────────────────────────────────────────────────────────────────
+const YT_VIDEO_CACHE_KEY = 'stacks_yt_videos_v1';
+const YT_VIDEO_WEEK_KEY  = 'stacks_yt_video_week';
+
+// Build keyword queries from current tab categories (static + AI)
+function buildYtKeywords() {
+  // Curated fallback queries covering the main tab themes
+  const fallback = [
+    'history documentary long form',
+    'space exploration deep dive',
+    'geopolitics world affairs analysis',
+    'ancient civilizations documentary',
+    'physics cosmology lecture',
+    'economics history documentary',
+    'philosophy religion history',
+    'naval history warfare documentary',
+    'cold war history documentary',
+    'medieval history lecture',
+    'astronomy astrophysics explained',
+    'military history deep dive',
+  ];
+
+  // Pull keywords from AI categories if available
+  const aiKeywords = [];
+  tabs.filter(t => !t.tabType && t._aiCategories?.length).forEach(tab => {
+    // Convert category names to readable search terms
+    const sample = tab._aiCategories.slice(0, 6).map(c =>
+      c.replace(/_/g,' ').replace(/\(.*?\)/g,'').trim().toLowerCase()
+    ).filter(s => s.length > 4 && s.length < 40);
+    if (sample.length) aiKeywords.push(sample[Math.floor(Math.random()*sample.length)] + ' documentary');
+  });
+
+  // Also add from static categories
+  tabs.filter(t => !t.tabType && t.categories?.length).forEach(tab => {
+    const sample = tab.categories.slice(0, 4).map(c =>
+      c.replace(/_/g,' ').replace(/\(.*?\)/g,'').trim().toLowerCase()
+    ).filter(s => s.length > 4 && s.length < 40);
+    if (sample.length) aiKeywords.push(sample[Math.floor(Math.random()*sample.length)] + ' history');
+  });
+
+  const combined = [...new Set([...aiKeywords, ...fallback])];
+  // Return 8 random queries for this fetch session
+  return combined.sort(() => Math.random()-0.5).slice(0, 8);
+}
+
+async function fetchYouTubeVideos() {
+  // Return session cache if fresh
+  if (ytCache.fetched && ytCache.items?.length) return ytCache.items;
+
+  // Return weekly localStorage cache if still valid
+  const stored = localStorage.getItem(YT_VIDEO_CACHE_KEY);
+  const storedWeek = localStorage.getItem(YT_VIDEO_WEEK_KEY);
+  if (stored && storedWeek === thisWeekKey()) {
+    const cached = JSON.parse(stored);
+    ytCache.items = cached; ytCache.fetched = true;
+    return cached;
+  }
+
+  const ytKey = getYtApiKey();
+  if (!ytKey) {
+    console.log('[Stacks] No YouTube API key — video tab needs a key in Settings');
+    return [];
+  }
+
+  const queries = buildYtKeywords();
+  const allItems = [];
+  const seenVideoIds = new Set();
+
+  for (const query of queries) {
+    try {
+      const url = new URL('https://www.googleapis.com/youtube/v3/search');
+      url.searchParams.set('part', 'snippet');
+      url.searchParams.set('q', query);
+      url.searchParams.set('type', 'video');
+      url.searchParams.set('videoDuration', 'long'); // >20 min
+      url.searchParams.set('videoEmbeddable', 'true');
+      url.searchParams.set('relevanceLanguage', 'en');
+      url.searchParams.set('maxResults', '5');
+      url.searchParams.set('order', 'relevance');
+      url.searchParams.set('key', ytKey);
+
+      const res = await fetch(url.toString());
+      if (!res.ok) { console.log('[Stacks] YT search error:', res.status, query); continue; }
+      const data = await res.json();
+
+      (data.items || []).forEach(item => {
+        const videoId = item.id?.videoId; if (!videoId || seenVideoIds.has(videoId)) return;
+        seenVideoIds.add(videoId);
+        const snippet = item.snippet || {};
+        allItems.push({
+          type: 'video',
+          title: snippet.title || '',
+          extract: snippet.description?.slice(0, 200) || 'Educational deep-dive video.',
+          thumbnail: snippet.thumbnails?.high?.url || snippet.thumbnails?.default?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          url: `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`,
+          extUrl: `https://www.youtube.com/watch?v=${videoId}`,
+          sourceName: snippet.channelTitle || 'YouTube',
+          sourceColor: '#006655',
+          tabId: 'video',
+          videoId,
+          publishedAt: snippet.publishedAt || '',
+          readTime: 'Video',
+          id: 'yt_' + videoId
+        });
+      });
+    } catch(e) { console.log('[Stacks] YT search failed:', query, e.message); }
+  }
+
+  // Sort newest first, cache
+  allItems.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+  ytCache.items = allItems; ytCache.fetched = true;
+  if (allItems.length) {
+    try {
+      localStorage.setItem(YT_VIDEO_CACHE_KEY, JSON.stringify(allItems));
+      localStorage.setItem(YT_VIDEO_WEEK_KEY, thisWeekKey());
+    } catch(e) {} // storage quota
+  }
+  console.log(`[Stacks] YouTube: ${allItems.length} videos from ${queries.length} searches`);
+  return allItems;
+}
+
+// Legacy stub — kept so nothing breaks if called
+async function refreshYouTubeChannels() { /* now handled by fetchYouTubeVideos */ }
+
+async function fetchOneVideoArticle() {
+  const items = await fetchYouTubeVideos(); if (!items.length) return null;
+  const seenLog = loadSeenTitles();
+  const pool = items.filter(i => !seenLog.has(i.title));
+  return pool.length ? pick(pool) : pick(items);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NASA APOD — astronomy picture of the day for beauty tiles
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchAPODImages() {
+  if (apodCache.length) return apodCache;
+  try {
+    const end = new Date().toISOString().slice(0,10);
+    const start = new Date(Date.now()-30*24*60*60*1000).toISOString().slice(0,10);
+    const nasaKey = localStorage.getItem('stacks_nasa_key') || NASA_DEMO_KEY;
+    const data = await (await fetch(`https://api.nasa.gov/planetary/apod?api_key=${nasaKey}&start_date=${start}&end_date=${end}`)).json();
+    const images = Array.isArray(data) ? data.filter(d => d.media_type==='image') : [];
+    apodCache.push(...images);
+    return apodCache;
+  } catch(e) { return []; }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BEAUTY TILES — palette cleansers injected into the feed at random intervals
+// ─────────────────────────────────────────────────────────────────────────────
+let beautyCounter = 0;
+function shouldInjectBeauty() {
+  beautyCounter++;
+  // Inject every 3-5 cards (tighter than before)
+  if (beautyCounter >= 3 + Math.floor(Math.random()*3)) { beautyCounter = 0; return true; }
+  return false;
+}
+
+function makeQuoteTile() {
+  const q = BEAUTY_QUOTES[Math.floor(Math.random()*BEAUTY_QUOTES.length)];
+  const card = document.createElement('div'); card.className = 'card beauty-tile';
+  const body = document.createElement('div'); body.className = 'beauty-body'; body.style.justifyContent='center'; body.style.minHeight='160px';
+  const label = document.createElement('div'); label.className = 'beauty-label'; label.textContent = '— Pause —';
+  const text = document.createElement('div'); text.className = 'beauty-quote-text'; text.textContent = '\u201c'+q.q+'\u201d';
+  const attr = document.createElement('div'); attr.className = 'beauty-quote-attr'; attr.textContent = q.a;
+  body.appendChild(label); body.appendChild(text); body.appendChild(attr); card.appendChild(body);
+  return card;
+}
+
+function makePoemTile() {
+  const p = BEAUTY_POEMS[Math.floor(Math.random()*BEAUTY_POEMS.length)];
+  const card = document.createElement('div'); card.className = 'card beauty-tile';
+  const body = document.createElement('div'); body.className = 'beauty-body'; body.style.minHeight='160px';
+  const label = document.createElement('div'); label.className = 'beauty-label'; label.textContent = '— Verse —';
+  const text = document.createElement('div'); text.className = 'beauty-poem'; text.textContent = p.lines;
+  const attr = document.createElement('div'); attr.className = 'beauty-quote-attr'; attr.textContent = p.a;
+  body.appendChild(label); body.appendChild(text); body.appendChild(attr); card.appendChild(body);
+  return card;
+}
+
+function makeArtTile() {
+  const depts=[11,12,13,14,15,17,21];
+  const deptId = depts[Math.floor(Math.random()*depts.length)];
+  const card = document.createElement('div'); card.className = 'card beauty-tile';
+  const imgWrap = document.createElement('div'); imgWrap.style.cssText='width:100%;height:200px;overflow:hidden;flex-shrink:0;background:#111;';
+  const body = document.createElement('div'); body.className = 'beauty-body';
+  const label = document.createElement('div'); label.className='beauty-label'; label.textContent='— From the Collection —';
+  const titleEl = document.createElement('div'); titleEl.className='beauty-title'; titleEl.textContent='Loading artwork…';
+  const metaEl = document.createElement('div'); metaEl.className='beauty-meta'; metaEl.textContent='Metropolitan Museum of Art';
+  body.appendChild(label); body.appendChild(titleEl); body.appendChild(metaEl);
+  card.appendChild(imgWrap); card.appendChild(body);
+  (async()=>{
+    try {
+      const sData = await (await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&isPublicDomain=true&departmentId=${deptId}&q=art`)).json();
+      const ids = sData.objectIDs||[]; if(!ids.length){titleEl.textContent='Work unavailable';return;}
+      const obj = await (await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${ids[Math.floor(Math.random()*Math.min(ids.length,200))]}`)).json();
+      if(!obj.primaryImageSmall){titleEl.textContent='Work unavailable';return;}
+      const img=document.createElement('img'); img.src=obj.primaryImageSmall; img.className='beauty-art-img';
+      img.onerror=()=>{titleEl.textContent='Work unavailable';};
+      imgWrap.appendChild(img);
+      titleEl.textContent=obj.title||'Untitled';
+      metaEl.textContent=(obj.artistDisplayName||'Unknown')+(obj.objectDate?', '+obj.objectDate:'');
+      card.style.cursor='pointer';
+      card.addEventListener('click',()=>window.open(`https://www.metmuseum.org/art/collection/search/${obj.objectID}`,'_blank'));
+    }catch(e){titleEl.textContent='Work unavailable';}
+  })();
+  return card;
+}
+
+async function makeSpaceTile() {
+  const card=document.createElement('div'); card.className='card beauty-tile';
+  const imgWrap=document.createElement('div'); imgWrap.style.cssText='width:100%;height:200px;overflow:hidden;flex-shrink:0;background:#000;';
+  const body=document.createElement('div'); body.className='beauty-body';
+  const label=document.createElement('div'); label.className='beauty-label'; label.textContent='— NASA APOD —';
+  const titleEl=document.createElement('div'); titleEl.className='beauty-title'; titleEl.textContent='Loading…';
+  const metaEl=document.createElement('div'); metaEl.className='beauty-meta';
+  body.appendChild(label); body.appendChild(titleEl); body.appendChild(metaEl);
+  card.appendChild(imgWrap); card.appendChild(body);
+  (async()=>{
+    const images=await fetchAPODImages(); if(!images.length){titleEl.textContent='No image available';return;}
+    const apod=images[Math.floor(Math.random()*images.length)];
+    const img=document.createElement('img'); img.src=apod.url; img.alt=apod.title; img.className='beauty-art-img';
+    imgWrap.appendChild(img);
+    titleEl.textContent=apod.title;
+    metaEl.textContent=apod.date+(apod.copyright?' \u00b7 \u00a9 '+apod.copyright.trim():'');
+    if(apod.explanation){
+      const ex=document.createElement('div'); ex.className='beauty-meta';
+      ex.textContent=apod.explanation.slice(0,200)+'\u2026';
+      body.appendChild(ex);
+    }
+    card.style.cursor='pointer';
+    card.addEventListener('click',()=>window.open(`https://apod.nasa.gov/apod/ap${apod.date.replace(/-/g,'').slice(2)}.html`,'_blank'));
+  })();
+  return card;
+}
+
+function injectBeautyTile(grid) {
+  // Weights: art 55%, space 30%, poem 10%, quote 5%
+  const roll = Math.random();
+  if (roll < 0.55) grid.appendChild(makeArtTile());
+  else if (roll < 0.85) makeSpaceTile().then(t => { if(t) grid.appendChild(t); });
+  else if (roll < 0.95) grid.appendChild(makePoemTile());
+  else grid.appendChild(makeQuoteTile());
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────────────────────────────────────
+function setStatus(s) {
+  const d = document.getElementById('statusDot');
+  d.className = 'status-dot' + (s ? ' '+s : '');
+}
+
+function estimateReadTime(text) {
+  return Math.max(1, Math.round((text||'').trim().split(/\s+/).length / 200)) + ' min read';
+}
+
+function trimSummary(text) {
+  let c = text
+    .replace(/\([^)]*\/[^)]*\/[^)]*\)/g, '')
+    .replace(/\(\s*[a-zA-Z]{1,5}:\s*\/[^)]+\/[^)]*\)/g, '')
+    .replace(/\s{2,}/g, ' ').trim();
+  const sents = c.match(/[^.!?]+[.!?]+/g) || [c];
+  return sents.slice(0, 3).join(' ').trim();
+}
+
+function stripHtml(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html || '';
+  return (d.textContent || d.innerText || '').replace(/\s{2,}/g,' ').trim();
+}
+
+const SKIP_RX = [
+  /^list of /i, /^index of /i, /^\d{4}$/, /disambiguation/i,
+  /^(january|february|march|april|may|june|july|august|september|october|november|december)\b/i,
+  /municipality/i, /\b(township|village|parish|borough) of\b/i,
+  /^elections in\b/i, /^politics of\b/i,
+  /^geography of\b/i, /^outline of\b/i, /^culture of\b/i,
+  /^economy of\b/i, /\bdemography\b/i, /^demographics\b/i
+];
+
+function shouldSkip(title, extract) {
+  if (!title || title.length < 5) return true;
+  for (const rx of SKIP_RX) if (rx.test(title)) return true;
+  if (!extract || extract.trim().length < 200) return true;
+  return false;
+}
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function getTab(id) { return tabs.find(t => t.id === id); }
+function getTabColor(id) { return getTab(id)?.color || '#333'; }
+function getTabName(id) { return getTab(id)?.name || id; }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WIKIPEDIA API — batched multi-title fetch (1 API call for all articles)
+// ─────────────────────────────────────────────────────────────────────────────
+const categoryMemberCache = {};
+
+async function fetchCategoryMembers(category) {
+  if (categoryMemberCache[category]) return categoryMemberCache[category];
+  const url = `https://en.wikipedia.org/w/api.php?action=query&list=categorymembers`
+    + `&cmtitle=Category:${encodeURIComponent(category)}&cmlimit=80&cmtype=page&format=json&origin=*`;
+  const data = await (await fetch(url)).json();
+  const members = data?.query?.categorymembers || [];
+  categoryMemberCache[category] = members;
+  return members;
+}
+
+// Fetch extracts + thumbnails for up to 20 titles in ONE API call
+async function fetchArticlesBatch(candidates) {
+  // candidates: array of { title, tabId, category, pageid }
+  if (!candidates.length) return [];
+  const titles = candidates.map(c => c.title).join('|');
+  const url = `https://en.wikipedia.org/w/api.php?action=query`
+    + `&prop=extracts|pageimages&exintro=true&explaintext=true`
+    + `&piprop=thumbnail&pithumbsize=600`
+    + `&titles=${encodeURIComponent(titles)}&format=json&origin=*`;
+  const data = await (await fetch(url)).json();
+  const pages = data?.query?.pages || {};
+  // Map results back by normalised title
+  return Object.values(pages).map(page => {
+    const candidate = candidates.find(c =>
+      c.title.toLowerCase() === (page.title || '').toLowerCase()
+    ) || candidates.find(c => String(c.pageid) === String(page.pageid));
+    if (!candidate) return null;
+    return {
+      candidate,
+      extract: page.extract || '',
+      thumbnail: page.thumbnail?.source || null
+    };
+  }).filter(Boolean);
+}
+
+// Pick candidate members from a tab's categories (all category fetches in parallel)
+async function pickWikiCandidates(tabId, n = 4) {
+  const tab = getTab(tabId);
+  if (!tab) return [];
+  const cats = getEffectiveCategories(tab);
+  if (!cats.length) return [];
+
+  // Pick n different categories, fetch their members in parallel
+  const selectedCats = [];
+  const shuffledCats = [...cats].sort(() => Math.random()-0.5);
+  for (let i = 0; i < Math.min(n, shuffledCats.length); i++) {
+    selectedCats.push(shuffledCats[i]);
+  }
+
+  const memberResults = await Promise.allSettled(selectedCats.map(c => fetchCategoryMembers(c)));
+  const candidates = [];
+  memberResults.forEach((r, i) => {
+    if (r.status !== 'fulfilled' || !r.value.length) return;
+    const members = r.value;
+    const shuffled = [...members].sort(() => Math.random()-0.5).slice(0, 3);
+    shuffled.forEach(m => candidates.push({ ...m, tabId, category: selectedCats[i] }));
+  });
+  return candidates;
+}
+
+// Main Wikipedia batch fetch: given a list of tabIds, fetch all articles in 2 round trips
+async function fetchWikiArticlesForTabs(tabIds, targetCount) {
+  if (!tabIds.length) return [];
+
+  // 1. Collect candidates from all tabs simultaneously
+  const candidateGroups = await Promise.allSettled(
+    tabIds.map(id => pickWikiCandidates(id, 3))
+  );
+  const allCandidates = candidateGroups
+    .flatMap(r => r.status === 'fulfilled' ? r.value : [])
+    .filter(c => !SKIP_RX.some(rx => rx.test(c.title)));
+
+  if (!allCandidates.length) return [];
+
+  // Deduplicate candidates by title, shuffle for variety
+  const seen = new Set();
+  const unique = allCandidates.filter(c => {
+    if (seen.has(c.title)) return false;
+    seen.add(c.title); return true;
+  }).sort(() => Math.random()-0.5);
+
+  // 2. ONE batched API call for up to 20 candidates
+  const toFetch = unique.slice(0, 20);
+  let batchResults = [];
+  try {
+    batchResults = await fetchArticlesBatch(toFetch);
+  } catch(e) {
+    console.log('[Stacks] Wiki batch fetch failed:', e.message);
+    return [];
+  }
+
+  // 3. Filter, skip seen titles, build article objects
+  const seenLog = loadSeenTitles();
+  const articles = [];
+
+  for (const { candidate, extract, thumbnail } of batchResults) {
+    if (articles.length >= targetCount) break;
+    if (shouldSkip(candidate.title, extract)) continue;
+    if (seenLog.has(candidate.title)) continue;
+    articles.push({
+      type: 'wiki',
+      title: candidate.title,
+      extract: trimSummary(extract),
+      thumbnail,
+      tabId: candidate.tabId,
+      category: candidate.category,
+      readTime: estimateReadTime(extract),
+      id: (candidate.pageid || Math.random()) + '_' + Math.random()
+    });
+  }
+
+  return articles;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RSS — direct fetch via CORS proxy, full XML parsing
+// ─────────────────────────────────────────────────────────────────────────────
+function parseRSSXML(xmlText, source) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlText, 'application/xml');
+
+    // Check for parse error
+    if (doc.querySelector('parsererror')) {
+      console.log(`[Stacks] XML parse error for ${source.name}`);
+      return [];
+    }
+
+    // Support both RSS <item> and Atom <entry>
+    const items = [...doc.querySelectorAll('item, entry')];
+    return items.map(item => {
+      // Title — strip CDATA
+      const title = (item.querySelector('title')?.textContent || '').trim();
+
+      // Link — RSS uses text content, Atom uses href attribute
+      let link = '';
+      const linkEl = item.querySelector('link');
+      if (linkEl) {
+        link = linkEl.getAttribute('href') || linkEl.textContent?.trim() || '';
+      }
+      // Atom fallback: <link rel="alternate">
+      if (!link) {
+        const altLink = item.querySelector('link[rel="alternate"]');
+        link = altLink?.getAttribute('href') || '';
+      }
+
+      // Description/content — try multiple selectors in order of preference
+      let raw = '';
+      const contentEncoded = item.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0];
+      if (contentEncoded) {
+        raw = stripHtml(contentEncoded.textContent || '');
+      } else {
+        const descEl = item.querySelector('description') || item.querySelector('summary') || item.querySelector('content');
+        raw = stripHtml(descEl?.textContent || '');
+      }
+      const summary = raw.match(/[^.!?]+[.!?]+/g)?.slice(0,3).join(' ').trim() || raw.slice(0,300);
+
+      // Thumbnail: try media:thumbnail, enclosure, then first img in content
+      let thumb = null;
+      const mediaThumbnail = item.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail')[0];
+      if (mediaThumbnail) thumb = mediaThumbnail.getAttribute('url');
+
+      if (!thumb) {
+        const mediaContent = item.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')[0];
+        if (mediaContent && mediaContent.getAttribute('medium') === 'image') {
+          thumb = mediaContent.getAttribute('url');
+        }
+      }
+      if (!thumb) {
+        const enc = item.querySelector('enclosure');
+        if (enc && (enc.getAttribute('type') || '').startsWith('image')) thumb = enc.getAttribute('url');
+      }
+      if (!thumb) {
+        // Search raw HTML of content for img src
+        const contentEl = item.querySelector('content') || contentEncoded;
+        const htmlStr = contentEl?.textContent || item.querySelector('description')?.textContent || '';
+        const m = htmlStr.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (m) thumb = m[1];
+      }
+
+      // Parse publish date for recency sorting
+      const pubRaw = item.querySelector('pubDate')?.textContent || item.querySelector('published')?.textContent || item.querySelector('updated')?.textContent || '';
+      return {
+        type: 'rss', title,
+        extract: summary || title,
+        thumbnail: thumb,
+        url: link,
+        sourceName: source.name,
+        sourceColor: source.color,
+        tabIds: source.tabIds || [],
+        readTime: estimateReadTime(raw),
+        publishedAt: pubRaw ? new Date(pubRaw).getTime() : 0,
+        id: 'rss_' + source.name + '_' + Math.random()
+      };
+    }).filter(a => a.title.length > 5 && (a.extract || a.title).length > 20);
+  } catch(e) {
+    console.log('[Stacks] XML parse error:', e.message);
+    return [];
+  }
+}
+
+async function fetchRSSSource(source) {
+  if (rssCache[source.url]) return rssCache[source.url];
+
+  // Try two different CORS proxies in sequence
+  const proxies = [
+    'https://corsproxy.io/?url=',
+    'https://api.allorigins.win/raw?url='
+  ];
+
+  for (const proxy of proxies) {
+    try {
+      const proxyUrl = proxy + encodeURIComponent(source.url);
+      const res = await fetch(proxyUrl);
+      if (!res.ok) {
+        console.log(`[Stacks] RSS HTTP ${res.status} via ${proxy}: ${source.name}`);
+        continue;
+      }
+      const text = await res.text();
+      if (!text || text.length < 100) { console.log(`[Stacks] RSS empty response: ${source.name}`); continue; }
+      const items = parseRSSXML(text, source);
+      if (!items.length) { console.log(`[Stacks] RSS parsed 0 items: ${source.name}`); continue; }
+      console.log(`[Stacks] RSS ok: ${source.name} — ${items.length} items`);
+      // Sort newest-first before caching
+      items.sort((a,b) => (b.publishedAt||0) - (a.publishedAt||0));
+      rssCache[source.url] = items;
+      return items;
+    } catch(e) {
+      console.log(`[Stacks] RSS exception via ${proxy}: ${source.name}`, e.message);
+    }
+  }
+  return [];
+}
+
+async function fetchOneRSSArticle(tabId) {
+  const seenLog = loadSeenTitles();
+  const matching = RSS_SOURCES.filter(s => s.tabIds.includes(tabId)).sort(() => Math.random()-0.5);
+  if (!matching.length) return null;
+  for (const source of matching) {
+    const items = await fetchRSSSource(source);
+    if (!items.length) continue;
+    // Prefer unseen items from the recent half of the feed
+    const half = Math.ceil(items.length / 2);
+    const recentUnseen = items.slice(0, half).filter(i => !seenLog.has(i.title));
+    const anyUnseen = items.filter(i => !seenLog.has(i.title));
+    const pool = recentUnseen.length ? recentUnseen : anyUnseen.length ? anyUnseen : items;
+    return { ...pick(pool), tabId, id: 'rss_'+tabId+'_'+Math.random() };
+  }
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUBMED — NLM E-utilities API
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchPubMedArticles() {
+  if (pubmedCache.fetched && pubmedCache.items.length) return pubmedCache.items;
+  try {
+    // Pick 4 random search terms and run them in parallel for variety
+    const selectedTerms = [...PUBMED_SEARCH_TERMS].sort(() => Math.random()-0.5).slice(0, 4);
+
+    const searchResults = await Promise.allSettled(selectedTerms.map(async term => {
+      const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi`
+        + `?db=pubmed&term=${encodeURIComponent(term + '[Title/Abstract]')}`
+        + `&sort=pub+date&retmax=20&retmode=json&datetype=pdat&reldate=365`;
+      const res = await fetch(url);
+      const data = await res.json();
+      return data?.esearchresult?.idlist || [];
+    }));
+
+    // Combine and deduplicate IDs
+    const allIds = [...new Set(
+      searchResults.flatMap(r => r.status === 'fulfilled' ? r.value : [])
+    )].slice(0, 60);
+
+    if (!allIds.length) return [];
+
+    // Fetch summaries
+    const summaryUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi`
+      + `?db=pubmed&id=${allIds.join(',')}&retmode=json`;
+    const summaryRes = await fetch(summaryUrl);
+    const summaryData = await summaryRes.json();
+    const result = summaryData?.result || {};
+
+    // Fetch abstracts in batch (first 40)
+    const fetchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi`
+      + `?db=pubmed&id=${allIds.slice(0,40).join(',')}&rettype=abstract&retmode=xml`;
+    const fetchRes = await fetch(fetchUrl);
+    const xmlText = await fetchRes.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+    const abstractMap = {};
+    xmlDoc.querySelectorAll('PubmedArticle').forEach(art => {
+      const pmid = art.querySelector('PMID')?.textContent;
+      const abstractTexts = [...art.querySelectorAll('AbstractText')].map(el => el.textContent).join(' ');
+      if (pmid && abstractTexts) abstractMap[pmid] = abstractTexts;
+    });
+
+    const items = allIds.map(id => {
+      const s = result[id];
+      if (!s || !s.title) return null;
+      const abstract = abstractMap[id] || '';
+      const extract = abstract ? trimSummary(abstract) : s.title;
+      return {
+        type: 'pubmed',
+        title: s.title,
+        extract: extract || 'No abstract available.',
+        thumbnail: null,
+        url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
+        sourceName: s.fulljournalname || s.source || 'PubMed',
+        sourceColor: '#003c64',
+        tabId: 'medical',
+        readTime: estimateReadTime(abstract || s.title),
+        pmid: id,
+        pubDate: s.pubdate || '',
+        authors: (s.authors || []).slice(0,3).map(a => a.name).join(', '),
+        id: 'pubmed_' + id
+      };
+    }).filter(Boolean).filter(a => a.title.length > 10);
+
+    pubmedCache.items = items;
+    pubmedCache.fetched = true;
+    console.log(`[Stacks] PubMed: ${items.length} articles loaded`);
+    return items;
+  } catch(e) {
+    console.log('[Stacks] PubMed fetch failed:', e.message);
+    return [];
+  }
+}
+
+async function fetchOnePubMedArticle() {
+  const items = await fetchPubMedArticles();
+  if (!items.length) return null;
+  const seen = new Set(articles.filter(a => a.type === 'pubmed').map(a => a.pmid));
+  const pool = items.filter(i => !seen.has(i.pmid));
+  return pool.length ? pick(pool) : pick(items);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HUMANITIES RSS
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchHumanitiesRSS() {
+  const humanitiesTab = getTab('humanities');
+  const topics = humanitiesTab?.topics || [];
+
+  // Pick 2-3 random sources, fetch them
+  const shuffled = [...HUMANITIES_RSS_SOURCES].sort(() => Math.random() - 0.5);
+  const selected = shuffled.slice(0, 3);
+
+  const allItems = [];
+  for (const source of selected) {
+    const items = await fetchRSSSource({...source, tabIds: ['humanities']});
+    allItems.push(...items.map(i => ({
+      ...i, tabId: 'humanities', sourceColor: source.color,
+      type: 'humanities'
+    })));
+  }
+
+  // If we have topics and an API key, try to filter/match by topic keywords
+  if (topics.length && allItems.length) {
+    const topicWords = topics.flatMap(t => t.toLowerCase().split(/\s+/));
+    const scored = allItems.map(a => {
+      const text = (a.title + ' ' + a.extract).toLowerCase();
+      const score = topicWords.filter(w => text.includes(w)).length;
+      return { ...a, _score: score };
+    });
+    scored.sort((a,b) => b._score - a._score);
+    return scored;
+  }
+  return allItems;
+}
+
+async function fetchOneHumanitiesArticle() {
+  const items = await fetchHumanitiesRSS();
+  if (!items.length) return null;
+  const seen = new Set(articles.filter(a => a.type === 'humanities').map(a => a.title));
+  const pool = items.filter(i => !seen.has(i.title));
+  return pool.length ? pick(pool) : pick(items);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BATCH FETCH
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchBatch(count = 6) {
+  const activeList = [...activeTabs];
+  if (!activeList.length) return [];
+
+  const hasMedical = activeList.includes('medical');
+  const hasHumanities = activeList.includes('humanities');
+  const hasVideo = activeList.includes('video');
+  const wikiTabIds = activeList.filter(id => !getTab(id)?.tabType);
+  const rssEligible = wikiTabIds.filter(id => RSS_SOURCES.some(s => s.tabIds.includes(id)));
+
+  const [rss1, rss2, pubmed1, pubmed2, hum1, hum2, vid1, wikiArticles] = await Promise.allSettled([
+    rssEligible.length ? fetchOneRSSArticle(pick(rssEligible)) : Promise.resolve(null),
+    rssEligible.length ? fetchOneRSSArticle(pick(rssEligible)) : Promise.resolve(null),
+    hasMedical ? fetchOnePubMedArticle() : Promise.resolve(null),
+    hasMedical && count >= 6 ? fetchOnePubMedArticle() : Promise.resolve(null),
+    hasHumanities ? fetchOneHumanitiesArticle() : Promise.resolve(null),
+    hasHumanities && count >= 6 ? fetchOneHumanitiesArticle() : Promise.resolve(null),
+    hasVideo ? fetchOneVideoArticle() : Promise.resolve(null),
+    wikiTabIds.length ? fetchWikiArticlesForTabs(wikiTabIds, count) : Promise.resolve([])
+  ]);
+
+  const specials = [rss1, rss2, pubmed1, pubmed2, hum1, hum2, vid1]
+    .filter(r => r.status === 'fulfilled' && r.value)
+    .map(r => r.value);
+
+  const wikiGood = (wikiArticles.status === 'fulfilled' ? wikiArticles.value : []) || [];
+
+  // Interleave: special sources at positions 0, 2, 4; wiki fills the rest
+  const combined = [];
+  const seenTitles = new Set();
+  let si = 0, wi = 0;
+  while (combined.length < count) {
+    // Every other slot try a special source
+    const useSpecial = (combined.length % 3 === 1) && si < specials.length;
+    const candidate = useSpecial ? specials[si++] : (wi < wikiGood.length ? wikiGood[wi++] : (si < specials.length ? specials[si++] : null));
+    if (!candidate) break;
+    if (seenTitles.has(candidate.title)) continue;
+    seenTitles.add(candidate.title);
+    combined.push(candidate);
+  }
+
+  return combined;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRE-FETCH QUEUE — silently fills next batch while user reads
+// ─────────────────────────────────────────────────────────────────────────────
+let prefetchedBatch = null;
+let prefetchInProgress = false;
+
+async function prefetchNextBatch() {
+  if (prefetchInProgress || prefetchedBatch) return;
+  prefetchInProgress = true;
+  try {
+    prefetchedBatch = await fetchBatch(6);
+  } catch(e) {
+    prefetchedBatch = null;
+  }
+  prefetchInProgress = false;
+}
+
+async function getNextBatch() {
+  if (prefetchedBatch && prefetchedBatch.length) {
+    const batch = prefetchedBatch;
+    prefetchedBatch = null;
+    // Start pre-fetching the one after this immediately
+    setTimeout(prefetchNextBatch, 300);
+    return batch;
+  }
+  return fetchBatch(6);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function isAllActive() {
+  // Video tab is always excluded from "All"
+  return tabs.filter(t => t.id !== 'video').every(t => activeTabs.has(t.id));
+}
+
+function toggleAll() {
+  if (isAllActive()) {
+    activeTabs = new Set([tabs[0].id]);
+  } else {
+    // Activate everything except video
+    activeTabs = new Set(tabs.filter(t => t.id !== 'video').map(t => t.id));
+  }
+  saveState(); renderTabBar(); refreshFeed();
+}
+
+function renderTabBar() {
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = '';
+
+  // "All" pill — always first
+  const allPill = document.createElement('button');
+  allPill.className = 'tab-pill-all' + (isAllActive() ? ' all-active' : '');
+  allPill.textContent = 'All';
+  allPill.addEventListener('click', toggleAll);
+  bar.appendChild(allPill);
+
+  tabs.forEach(tab => {
+    const pill = document.createElement('button');
+    const isVideo = tab.id === 'video';
+    pill.className = 'tab-pill' + (activeTabs.has(tab.id) ? ' active' : '') + (isVideo ? ' video-tab' : '');
+    pill.textContent = tab.name;
+    pill.addEventListener('click', () => toggleTab(tab.id));
+    bar.appendChild(pill);
+  });
+}
+
+function toggleTab(tabId) {
+  activeTabs.has(tabId) ? activeTabs.delete(tabId) : activeTabs.add(tabId);
+  saveState(); renderTabBar(); refreshFeed();
+}
+
+function appendArticles(newArticles) {
+  const grid = document.getElementById('cardGrid');
+  newArticles.forEach(a => {
+    grid.appendChild(makeCard(a));
+    articles.push(a);
+    // Inject beauty/pause tile at random intervals (skip for video-only feeds)
+    if (a.tabId !== 'video' && shouldInjectBeauty()) {
+      injectBeautyTile(grid);
+    }
+  });
+  recordSeenArticles(newArticles);
+}
+
+function renderSkeletons(n) {
+  const grid = document.getElementById('cardGrid');
+  for (let i = 0; i < n; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'skeleton';
+    sk.innerHTML = `<div class="skel skel-img"></div>
+      <div class="skel-body-wrap">
+        <div class="skel skel-tag"></div>
+        <div class="skel skel-t1"></div><div class="skel skel-t2"></div>
+        <div class="skel skel-b1"></div><div class="skel skel-b2"></div><div class="skel skel-b3"></div>
+      </div>`;
+    grid.appendChild(sk);
+  }
+}
+
+function removeSkeletons() {
+  document.querySelectorAll('.skeleton').forEach(el => el.remove());
+}
+
+function makeVideoCard(article) {
+  const card = document.createElement('div'); card.className = 'card video-card';
+  const thumbWrap = document.createElement('div'); thumbWrap.className = 'video-thumb-wrap';
+  const img = document.createElement('img');
+  img.src = article.thumbnail || `https://i.ytimg.com/vi/${article.videoId}/hqdefault.jpg`;
+  img.alt = article.title; img.className = 'video-thumb'; img.loading = 'lazy';
+  const playBtn = document.createElement('div'); playBtn.className = 'video-play-btn'; playBtn.textContent = '\u25b6';
+  thumbWrap.appendChild(img); thumbWrap.appendChild(playBtn);
+  const body = document.createElement('div'); body.className = 'card-body';
+  const tagsRow = document.createElement('div'); tagsRow.className = 'card-tags-row';
+  const tag = document.createElement('span'); tag.className = 'card-tag'; tag.style.background = '#006655'; tag.textContent = 'Video';
+  const badge = document.createElement('span'); badge.className = 'card-badge video'; badge.textContent = 'Deep Dive';
+  tagsRow.appendChild(tag); tagsRow.appendChild(badge);
+  const titleEl = document.createElement('div'); titleEl.className = 'card-title'; titleEl.textContent = article.title;
+  const footer = document.createElement('div'); footer.className = 'card-footer';
+  const metaCol = document.createElement('div'); metaCol.className = 'card-meta-col';
+  const rt = document.createElement('span'); rt.className = 'card-readtime'; rt.textContent = 'Video';
+  const bl = document.createElement('span'); bl.className = 'card-byline'; bl.textContent = article.sourceName;
+  metaCol.appendChild(rt); metaCol.appendChild(bl);
+  const arrow = document.createElement('span'); arrow.className = 'card-arrow'; arrow.textContent = '\u2192';
+  footer.appendChild(metaCol); footer.appendChild(arrow);
+  body.appendChild(tagsRow); body.appendChild(titleEl); body.appendChild(footer);
+  card.appendChild(thumbWrap); card.appendChild(body);
+  card.addEventListener('click', () => openReader(article));
+  return card;
+}
+
+function makeCard(article) {
+  if (article.type === 'video') return makeVideoCard(article);
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const isPubMed = article.type === 'pubmed';
+  const isHumanities = article.type === 'humanities';
+  const isRSS = article.type === 'rss';
+  const tabColor = isPubMed ? '#003c64' : isHumanities ? '#3c1450' : isRSS ? (article.sourceColor || '#333') : getTabColor(article.tabId);
+  const tabName = getTabName(article.tabId);
+  const glyph = TAB_GLYPHS[article.tabId] || '◆';
+  const isRecent = isRSS || isPubMed || isHumanities || RECENT_CATS.has(article.category);
+
+  // Image block
+  const imgWrap = document.createElement('div');
+  imgWrap.className = 'card-img-wrap';
+
+  if (article.thumbnail) {
+    const img = document.createElement('img');
+    img.src = article.thumbnail;
+    img.alt = article.title;
+    img.loading = 'lazy';
+    img.onerror = () => {
+      imgWrap.innerHTML = `<div class="card-img-placeholder"><span class="card-img-glyph">${glyph}</span></div>`;
+      if (isRSS || isPubMed || isHumanities) addSourceStripe(imgWrap, article.sourceName);
+    };
+    imgWrap.appendChild(img);
+  } else {
+    imgWrap.innerHTML = `<div class="card-img-placeholder"><span class="card-img-glyph">${glyph}</span></div>`;
+  }
+
+  if (isRSS || isPubMed || isHumanities) addSourceStripe(imgWrap, article.sourceName);
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'card-body';
+
+  const tagsRow = document.createElement('div');
+  tagsRow.className = 'card-tags-row';
+
+  const tag = document.createElement('span');
+  tag.className = 'card-tag';
+  tag.style.background = tabColor;
+  tag.textContent = tabName;
+  tagsRow.appendChild(tag);
+
+  if (isRecent) {
+    const badge = document.createElement('span');
+    badge.className = 'card-badge' + (isPubMed ? ' pubmed' : isHumanities ? ' humanities' : '');
+    if (isPubMed) badge.textContent = 'PubMed';
+    else if (isHumanities) badge.textContent = 'Journal';
+    else if (isRSS) badge.textContent = 'Live';
+    else badge.textContent = 'Recent';
+    tagsRow.appendChild(badge);
+  }
+
+  if (isPubMed && article.pubDate) {
+    const dateBadge = document.createElement('span');
+    dateBadge.className = 'card-badge pubmed';
+    dateBadge.textContent = article.pubDate.slice(0,4);
+    tagsRow.appendChild(dateBadge);
+  }
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'card-title';
+  titleEl.textContent = article.title;
+
+  const extractEl = document.createElement('div');
+  extractEl.className = 'card-extract';
+  extractEl.textContent = article.extract;
+
+  const footer = document.createElement('div');
+  footer.className = 'card-footer';
+  const metaCol = document.createElement('div');
+  metaCol.className = 'card-meta-col';
+  const rt = document.createElement('span');
+  rt.className = 'card-readtime';
+  rt.textContent = article.readTime;
+  metaCol.appendChild(rt);
+
+  if (isPubMed && article.authors) {
+    const byline = document.createElement('span');
+    byline.className = 'card-byline';
+    byline.textContent = article.authors;
+    metaCol.appendChild(byline);
+  } else if ((isRSS || isHumanities) && article.sourceName) {
+    const byline = document.createElement('span');
+    byline.className = 'card-byline';
+    byline.textContent = article.sourceName;
+    metaCol.appendChild(byline);
+  }
+
+  const arrow = document.createElement('span');
+  arrow.className = 'card-arrow';
+  arrow.textContent = '→';
+  footer.appendChild(metaCol);
+  footer.appendChild(arrow);
+
+  body.appendChild(tagsRow);
+  body.appendChild(titleEl);
+  body.appendChild(extractEl);
+  body.appendChild(footer);
+
+  card.appendChild(imgWrap);
+  card.appendChild(body);
+  card.addEventListener('click', () => openReader(article));
+  return card;
+}
+
+function addSourceStripe(imgWrap, name) {
+  const stripe = document.createElement('div');
+  stripe.className = 'card-img-source';
+  stripe.textContent = name;
+  imgWrap.appendChild(stripe);
+}
+
+async function refreshFeed() {
+  if (isLoading) return;
+  isLoading = true; articles = [];
+  prefetchedBatch = null;
+  prefetchInProgress = false;
+  beautyCounter = 0;
+  setStatus('loading');
+  document.getElementById('feedLabel').textContent = 'Loading articles…';
+  document.getElementById('loadMoreBtn').disabled = true;
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = '';
+  renderSkeletons(4);
+
+  // Fire initial fetch AND next-batch prefetch simultaneously
+  // so "Load more" is instant the moment first batch renders
+  const [batch] = await Promise.all([
+    fetchBatch(4),
+    // prefetch quietly in parallel — result stored in prefetchedBatch
+    (async () => {
+      if (prefetchInProgress || prefetchedBatch) return;
+      prefetchInProgress = true;
+      try { prefetchedBatch = await fetchBatch(6); } catch(e) { prefetchedBatch = null; }
+      prefetchInProgress = false;
+    })()
+  ]);
+
+  removeSkeletons();
+  if (!activeTabs.size) {
+    grid.innerHTML = '<div class="empty-state"><p>Select at least one topic tab above.</p></div>';
+    setStatus(''); isLoading = false;
+    document.getElementById('loadMoreBtn').disabled = false;
+    document.getElementById('feedLabel').textContent = 'No topics selected';
+    return;
+  }
+  appendArticles(batch);
+  const n = articles.length;
+  document.getElementById('feedLabel').textContent = `${n} article${n!==1?'s':''} loaded`;
+  setStatus('ready'); isLoading = false;
+  document.getElementById('loadMoreBtn').disabled = false;
+}
+
+async function loadMore() {
+  if (isLoading) return;
+  isLoading = true; setStatus('loading');
+  document.getElementById('loadMoreBtn').disabled = true;
+  document.getElementById('loadMoreBtn').textContent = 'Loading…';
+  renderSkeletons(6);
+  const batch = await getNextBatch();
+  removeSkeletons();
+  appendArticles(batch);
+  const n = articles.length;
+  document.getElementById('feedLabel').textContent = `${n} article${n!==1?'s':''} loaded`;
+  setStatus('ready'); isLoading = false;
+  document.getElementById('loadMoreBtn').disabled = false;
+  document.getElementById('loadMoreBtn').textContent = 'Load more articles';
+  // Pre-fetch again for next load more
+  setTimeout(prefetchNextBatch, 300);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// READER
+// ─────────────────────────────────────────────────────────────────────────────
+function openReader(article) {
+  document.getElementById('readerTitle').textContent = article.title;
+  const link = document.getElementById('readerExtLink');
+  const iframe = document.getElementById('readerIframe');
+
+  if (article.type === 'video') {
+    link.href = article.extUrl || '#'; link.textContent = 'YouTube \u2197';
+    iframe.src = article.url; // embed URL with autoplay
+  } else if (article.type === 'pubmed') {
+    link.href = article.url;
+    link.textContent = 'PubMed ↗';
+    iframe.src = article.url;
+  } else if (article.type === 'rss' || article.type === 'humanities') {
+    link.href = article.url || '#';
+    link.textContent = (article.sourceName || 'Source') + ' ↗';
+    iframe.src = article.url || '';
+  } else {
+    link.href = `https://en.wikipedia.org/wiki/${encodeURIComponent(article.title)}`;
+    link.textContent = 'Wikipedia ↗';
+    iframe.src = `https://en.m.wikipedia.org/wiki/${encodeURIComponent(article.title)}`;
+  }
+  document.getElementById('readerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReader() {
+  document.getElementById('readerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { document.getElementById('readerIframe').src = ''; }, 350);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI PROMPT WORKSHOP — generate prompt, parse + verify pasted output
+// ─────────────────────────────────────────────────────────────────────────────
+
+function generateCategoryPrompt() {
+  const wikiTabs = tabs.filter(t => !t.tabType);
+  const tabList = wikiTabs.map(t => {
+    const existing = t.categories.slice(0, 6).join(', ');
+    return `  - Tab ID: "${t.id}" | Name: "${t.name}" | Sample existing categories: [${existing}...]`;
+  }).join('\n');
+
+  return `You are helping curate a personal Wikipedia reading app. The app fetches random Wikipedia articles from user-defined categories. Your job is to suggest additional real Wikipedia category names for each tab below.
+
+RULES — read carefully:
+1. Every category name you suggest MUST be a real Wikipedia category that actually exists.
+2. Use underscores instead of spaces (e.g. Naval_battles_of_the_Pacific_War).
+3. Avoid broad overview categories like "History_of_France" — prefer specific, substantive ones like "Siege_of_Verdun" or "French_colonial_wars".
+4. Aim for 25-35 categories per tab.
+5. Favour non-Western history, obscure but rich topics, specific conflicts/movements/periods.
+6. Do NOT include categories already listed in the sample.
+7. Return ONLY a JSON object — no prose, no markdown fences, no explanation. Start your response with { and end with }.
+
+FORMAT:
+{
+  "tab_id": ["Category_Name_One", "Category_Name_Two", ...],
+  ...
+}
+
+TABS:
+${tabList}
+
+Verify each category name is real before including it. When in doubt, leave it out.`;
+}
+
+// Spot-check that pasted category names actually exist in Wikipedia
+async function verifyCategories(catsByTab, onProgress) {
+  const allCats = Object.values(catsByTab).flat();
+  if (!allCats.length) return { valid: 0, invalid: 0, checked: 0 };
+
+  // Sample up to 8 random categories to spot-check
+  const sample = allCats.sort(() => Math.random()-0.5).slice(0, 8);
+  let valid = 0, invalid = 0;
+
+  for (let i = 0; i < sample.length; i++) {
+    const cat = sample[i];
+    onProgress && onProgress(i, sample.length, cat);
+    try {
+      const url = `https://en.wikipedia.org/w/api.php?action=query&list=categorymembers`
+        + `&cmtitle=Category:${encodeURIComponent(cat)}&cmlimit=1&format=json&origin=*`;
+      const data = await (await fetch(url)).json();
+      const members = data?.query?.categorymembers || [];
+      if (members.length > 0) valid++; else invalid++;
+    } catch(e) { invalid++; }
+  }
+
+  return { valid, invalid, checked: sample.length };
+}
+
+async function applyPastedCategories(jsonText, statusEl, verifyEl, applyBtn) {
+  statusEl.textContent = 'Parsing…';
+  statusEl.className = 'prompt-status';
+
+  // Strip markdown fences if present
+  let clean = jsonText.trim()
+    .replace(/^```json\s*/i, '').replace(/^```\s*/i, '')
+    .replace(/\s*```$/, '').trim();
+
+  // Extract JSON object
+  const match = clean.match(/\{[\s\S]*\}/);
+  if (!match) {
+    statusEl.textContent = 'Could not find a JSON object in the pasted text. Make sure you copied the full AI response.';
+    statusEl.className = 'prompt-status err';
+    applyBtn.disabled = false;
+    return;
+  }
+
+  let parsed;
+  try { parsed = JSON.parse(match[0]); }
+  catch(e) {
+    statusEl.textContent = `JSON parse error: ${e.message}. Try copying the response again — the JSON may be malformed.`;
+    statusEl.className = 'prompt-status err';
+    applyBtn.disabled = false;
+    return;
+  }
+
+  // Validate structure — must be object with tab IDs as keys and arrays as values
+  const wikiTabIds = new Set(tabs.filter(t => !t.tabType).map(t => t.id));
+  const validKeys = Object.keys(parsed).filter(k => wikiTabIds.has(k));
+  if (!validKeys.length) {
+    statusEl.textContent = `No matching tab IDs found. Expected keys like: ${[...wikiTabIds].join(', ')}. Got: ${Object.keys(parsed).join(', ')}.`;
+    statusEl.className = 'prompt-status err';
+    applyBtn.disabled = false;
+    return;
+  }
+
+  const catsByTab = {};
+  let totalCats = 0;
+  for (const key of validKeys) {
+    if (!Array.isArray(parsed[key])) continue;
+    const cleaned = parsed[key]
+      .map(c => String(c).trim().replace(/\s+/g,'_'))
+      .filter(c => c.length > 3 && c.length < 100);
+    if (cleaned.length) { catsByTab[key] = cleaned; totalCats += cleaned.length; }
+  }
+
+  if (!totalCats) {
+    statusEl.textContent = 'Parsed successfully but found no valid category strings. Check the AI output format.';
+    statusEl.className = 'prompt-status err';
+    applyBtn.disabled = false;
+    return;
+  }
+
+  // Spot-check against Wikipedia
+  statusEl.textContent = `Parsed ${totalCats} categories across ${validKeys.length} tabs. Verifying against Wikipedia…`;
+  statusEl.className = 'prompt-status';
+
+  const verifyDots = [];
+  verifyEl.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    const dot = document.createElement('span'); dot.className = 'verify-dot';
+    const label = document.createElement('span'); label.textContent = '…';
+    const wrap = document.createElement('div'); wrap.className = 'verify-row';
+    wrap.appendChild(dot); wrap.appendChild(label);
+    verifyEl.appendChild(wrap);
+    verifyDots.push({ dot, label });
+  }
+
+  const { valid, invalid, checked } = await verifyCategories(catsByTab, (i, total, cat) => {
+    if (verifyDots[i]) {
+      verifyDots[i].dot.className = 'verify-dot checking';
+      verifyDots[i].label.textContent = cat.replace(/_/g,' ');
+    }
+  });
+
+  // Mark dots
+  verifyDots.forEach((d, i) => {
+    if (i >= checked) { d.dot.className = 'verify-dot'; d.label.textContent = ''; return; }
+  });
+
+  const passRate = checked > 0 ? valid / checked : 0;
+
+  if (passRate < 0.4) {
+    statusEl.textContent = `⚠ Verification failed: only ${valid}/${checked} spot-checked categories exist in Wikipedia. The AI may have hallucinated category names. Try re-running the prompt and checking the output more carefully.`;
+    statusEl.className = 'prompt-status warn';
+    // Mark dots red
+    verifyDots.slice(0, checked).forEach(d => d.dot.className = 'verify-dot err');
+    applyBtn.disabled = false;
+    return;
+  }
+
+  // Mark dots green/red based on result
+  // (we don't track per-dot results from the async check, so just show aggregate)
+  verifyDots.slice(0, valid).forEach(d => d.dot.className = 'verify-dot ok');
+  verifyDots.slice(valid, checked).forEach(d => d.dot.className = 'verify-dot err');
+
+  // Save and apply
+  localStorage.setItem('stacks_ai_cats_v1', JSON.stringify({ date: todayKey(), cats: catsByTab }));
+  applyAICategories(catsByTab);
+  renderTabBar();
+
+  const warnText = passRate < 0.75 ? ` (${invalid} of ${checked} spot-checked were not found — those may not surface articles)` : '';
+  statusEl.textContent = `✓ Applied ${totalCats} categories across ${validKeys.length} tabs${warnText}. Scroll down to review them.`;
+  statusEl.className = 'prompt-status ok';
+  applyBtn.disabled = false;
+  setTimeout(() => renderSettings(), 200);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SETTINGS
+// ─────────────────────────────────────────────────────────────────────────────
+function openSettings() { renderSettings(); document.getElementById('settingsOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+
+function renderSettings() {
+  const body = document.getElementById('settingsBody');
+  body.innerHTML = '';
+
+  // ── API KEY SECTION ──
+  const apiSection = document.createElement('div');
+  apiSection.className = 'settings-section-title';
+  apiSection.textContent = 'Anthropic API Key';
+  body.appendChild(apiSection);
+
+  const apiBox = document.createElement('div');
+  apiBox.className = 'api-key-section';
+  const apiDesc = document.createElement('div');
+  apiDesc.style.cssText = 'font-family:"Source Serif 4",serif;font-size:0.82rem;color:var(--muted);margin-bottom:0.4rem;line-height:1.5;';
+  apiDesc.textContent = 'Your Anthropic API key is reserved for future AI features. Category expansion now uses the Wikipedia API directly — no key needed for that. Get a key at console.anthropic.com if you want AI-powered features.';
+  const apiRow = document.createElement('div');
+  apiRow.className = 'api-key-row';
+  const apiInput = document.createElement('input');
+  apiInput.className = 'api-key-input';
+  apiInput.type = 'password';
+  apiInput.placeholder = 'sk-ant-…';
+  apiInput.value = getApiKey();
+  const apiSaveBtn = document.createElement('button');
+  apiSaveBtn.className = 'api-key-save-btn';
+  apiSaveBtn.textContent = 'Save Key';
+  const apiStatus = document.createElement('div');
+  apiStatus.className = 'api-key-status';
+  apiStatus.textContent = getApiKey() ? '✓ Key saved' : 'No key saved';
+  if (getApiKey()) apiStatus.classList.add('ok');
+
+  apiSaveBtn.addEventListener('click', () => {
+    const val = apiInput.value.trim();
+    if (!val) { apiStatus.textContent = 'Enter a key first.'; apiStatus.className = 'api-key-status err'; return; }
+    saveApiKey(val);
+    apiStatus.textContent = '✓ Key saved — AI categories will refresh tomorrow';
+    apiStatus.className = 'api-key-status ok';
+  });
+
+  apiRow.appendChild(apiInput);
+  apiRow.appendChild(apiSaveBtn);
+  apiBox.appendChild(apiDesc);
+  apiBox.appendChild(apiRow);
+  apiBox.appendChild(apiStatus);
+  body.appendChild(apiBox);
+
+  // ── NASA API KEY ──
+  const nasaSection = document.createElement('div');
+  nasaSection.className = 'settings-section-title'; nasaSection.style.marginTop = '1rem';
+  nasaSection.textContent = 'NASA API Key (optional)';
+  body.appendChild(nasaSection);
+  const nasaBox = document.createElement('div'); nasaBox.className = 'api-key-section';
+  const nasaDesc = document.createElement('div');
+  nasaDesc.style.cssText = 'font-family:"Source Serif 4",serif;font-size:0.82rem;color:var(--muted);margin-bottom:0.4rem;line-height:1.5;';
+  nasaDesc.textContent = 'Powers the NASA Astronomy Picture of the Day tiles in your feed. A free key removes rate limits — get one at api.nasa.gov. Stored only in your browser.';
+  const nasaRow = document.createElement('div'); nasaRow.className = 'api-key-row';
+  const nasaInput = document.createElement('input');
+  nasaInput.className = 'api-key-input'; nasaInput.type = 'text';
+  nasaInput.placeholder = 'Your NASA API key…';
+  nasaInput.value = localStorage.getItem('stacks_nasa_key') || '';
+  const nasaSaveBtn = document.createElement('button');
+  nasaSaveBtn.className = 'api-key-save-btn'; nasaSaveBtn.textContent = 'Save';
+  nasaSaveBtn.addEventListener('click', () => {
+    localStorage.setItem('stacks_nasa_key', nasaInput.value.trim());
+    apodCache.length = 0; // clear cache so next tile re-fetches with new key
+    nasaSaveBtn.textContent = '\u2713 Saved';
+  });
+  nasaRow.appendChild(nasaInput); nasaRow.appendChild(nasaSaveBtn);
+  nasaBox.appendChild(nasaDesc); nasaBox.appendChild(nasaRow); body.appendChild(nasaBox);
+
+  // ── YOUTUBE API KEY ──
+  const ytSection = document.createElement('div');
+  ytSection.className = 'settings-section-title'; ytSection.style.marginTop = '1rem';
+  ytSection.textContent = 'YouTube Data API Key';
+  body.appendChild(ytSection);
+  const ytBox = document.createElement('div'); ytBox.className = 'api-key-section';
+  const ytDesc = document.createElement('div');
+  ytDesc.style.cssText = 'font-family:"Source Serif 4",serif;font-size:0.82rem;color:var(--muted);margin-bottom:0.4rem;line-height:1.5;';
+  ytDesc.innerHTML = 'Powers the Deep Dive Video tab with keyword-searched long-form content. Free — enable <strong>YouTube Data API v3</strong> at console.cloud.google.com, then create an API key. 10,000 units/day free quota is plenty.';
+  const ytRow = document.createElement('div'); ytRow.className = 'api-key-row';
+  const ytInput = document.createElement('input');
+  ytInput.className = 'api-key-input'; ytInput.type = 'text';
+  ytInput.placeholder = 'AIza…';
+  ytInput.value = getYtApiKey();
+  const ytSaveBtn = document.createElement('button');
+  ytSaveBtn.className = 'api-key-save-btn'; ytSaveBtn.textContent = 'Save';
+  ytSaveBtn.addEventListener('click', () => {
+    localStorage.setItem('stacks_yt_api_key', ytInput.value.trim());
+    // Clear video cache so it re-fetches with new key
+    ytCache.items = []; ytCache.fetched = false;
+    localStorage.removeItem(YT_VIDEO_CACHE_KEY);
+    localStorage.removeItem(YT_VIDEO_WEEK_KEY);
+    ytSaveBtn.textContent = '\u2713 Saved';
+  });
+  ytRow.appendChild(ytInput); ytRow.appendChild(ytSaveBtn);
+  ytBox.appendChild(ytDesc); ytBox.appendChild(ytRow); body.appendChild(ytBox);
+
+  // ── AI CATEGORY WORKSHOP ──
+  const workshopSection = document.createElement('div');
+  workshopSection.className = 'settings-section-title';
+  workshopSection.style.marginTop = '1.5rem';
+  workshopSection.textContent = 'AI-Assisted Category Expansion';
+  body.appendChild(workshopSection);
+
+  // Status banner if categories already applied
+  const aiCached = localStorage.getItem('stacks_ai_cats_v1');
+  const aiParsed = aiCached ? (() => { try { return JSON.parse(aiCached); } catch(e) { return null; } })() : null;
+  if (aiParsed) {
+    const hasCats = Object.values(aiParsed.cats || {}).some(a => a.length);
+    if (hasCats) {
+      const banner = document.createElement('div');
+      banner.className = 'ai-banner';
+      const total = Object.values(aiParsed.cats).reduce((s,a) => s+a.length, 0);
+      banner.textContent = `${total} AI categories active — last applied ${aiParsed.date}`;
+      body.appendChild(banner);
+    }
+  }
+
+  // ── STEP 1: Generate + copy prompt ──
+  const step1 = document.createElement('div'); step1.className = 'prompt-section';
+  const step1Title = document.createElement('div'); step1Title.className = 'prompt-section-title';
+  step1Title.textContent = 'Step 1 — Copy the prompt into any AI';
+  const step1Desc = document.createElement('div'); step1Desc.className = 'prompt-section-desc';
+  step1Desc.textContent = 'This prompt is generated from your current tabs. Drop it into Claude, ChatGPT, Gemini, or any AI assistant. The AI will return a block of JSON containing verified Wikipedia category names tailored to your interests.';
+  const promptDisplay = document.createElement('textarea');
+  promptDisplay.className = 'prompt-textarea';
+  promptDisplay.readOnly = true;
+  promptDisplay.value = generateCategoryPrompt();
+  promptDisplay.style.minHeight = '140px';
+  const step1BtnRow = document.createElement('div'); step1BtnRow.className = 'prompt-btn-row';
+  const copyBtn = document.createElement('button'); copyBtn.className = 'prompt-copy-btn';
+  copyBtn.textContent = 'Copy Prompt';
+  copyBtn.addEventListener('click', async () => {
+    // Regenerate fresh in case tabs changed
+    promptDisplay.value = generateCategoryPrompt();
+    try {
+      await navigator.clipboard.writeText(promptDisplay.value);
+      copyBtn.textContent = '✓ Copied!';
+      setTimeout(() => { copyBtn.textContent = 'Copy Prompt'; }, 2000);
+    } catch(e) {
+      // Fallback for browsers that block clipboard
+      promptDisplay.select();
+      document.execCommand('copy');
+      copyBtn.textContent = '✓ Copied!';
+      setTimeout(() => { copyBtn.textContent = 'Copy Prompt'; }, 2000);
+    }
+  });
+  step1BtnRow.appendChild(copyBtn);
+  step1.appendChild(step1Title); step1.appendChild(step1Desc);
+  step1.appendChild(promptDisplay); step1.appendChild(step1BtnRow);
+  body.appendChild(step1);
+
+  // ── STEP 2: Paste + apply AI output ──
+  const step2 = document.createElement('div'); step2.className = 'prompt-section';
+  const step2Title = document.createElement('div'); step2Title.className = 'prompt-section-title';
+  step2Title.textContent = 'Step 2 — Paste the AI response and apply';
+  const step2Desc = document.createElement('div'); step2Desc.className = 'prompt-section-desc';
+  step2Desc.textContent = 'Copy the AI's entire response and paste it here. The app will parse the JSON, spot-check a sample of category names against Wikipedia to catch any hallucinations, then load the verified categories into your tabs.';
+  const pasteArea = document.createElement('textarea');
+  pasteArea.className = 'prompt-textarea paste-zone';
+  pasteArea.placeholder = 'Paste the AI's JSON response here…\n\nExpected format:\n{\n  "history": ["Category_One", "Category_Two", ...],\n  "science": ["Category_Three", ...],\n  ...\n}';
+  const step2BtnRow = document.createElement('div'); step2BtnRow.className = 'prompt-btn-row';
+  const applyBtn = document.createElement('button'); applyBtn.className = 'prompt-apply-btn';
+  applyBtn.textContent = 'Apply & Verify Categories';
+  const promptStatus = document.createElement('div'); promptStatus.className = 'prompt-status';
+  const verifyEl = document.createElement('div');
+  verifyEl.style.cssText = 'display:flex;flex-direction:column;gap:0.2rem;margin-top:0.4rem;';
+
+  applyBtn.addEventListener('click', async () => {
+    const text = pasteArea.value.trim();
+    if (!text) { promptStatus.textContent = 'Nothing pasted yet.'; promptStatus.className = 'prompt-status err'; return; }
+    applyBtn.disabled = true;
+    promptStatus.textContent = '';
+    verifyEl.innerHTML = '';
+    await applyPastedCategories(text, promptStatus, verifyEl, applyBtn);
+  });
+
+  // Also allow clearing the existing AI cache
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'prompt-copy-btn';
+  clearBtn.style.cssText += 'background:var(--muted);margin-left:auto;';
+  clearBtn.textContent = 'Clear AI Categories';
+  clearBtn.addEventListener('click', () => {
+    if (!confirm('Remove all AI-applied categories from all tabs?')) return;
+    localStorage.removeItem('stacks_ai_cats_v1');
+    tabs.forEach(t => { delete t._aiCategories; delete t._mergedCategories; });
+    renderSettings();
+  });
+
+  step2BtnRow.appendChild(applyBtn); step2BtnRow.appendChild(clearBtn);
+  step2.appendChild(step2Title); step2.appendChild(step2Desc);
+  step2.appendChild(pasteArea); step2.appendChild(step2BtnRow);
+  step2.appendChild(promptStatus); step2.appendChild(verifyEl);
+  body.appendChild(step2);
+
+  // Also keep the Wikipedia auto-discovery as a fallback option
+  const wikiDiscoverBtn = document.createElement('button');
+  wikiDiscoverBtn.className = 'refresh-ai-btn';
+  wikiDiscoverBtn.style.marginBottom = '0.5rem';
+  wikiDiscoverBtn.textContent = '↺ Auto-discover via Wikipedia (no AI needed)';
+  wikiDiscoverBtn.addEventListener('click', async () => {
+    const btn = wikiDiscoverBtn;
+    btn.disabled = true; btn.textContent = 'Searching Wikipedia…';
+    localStorage.removeItem('stacks_ai_cats_v1');
+    await refreshAICategories();
+    renderTabBar();
+    const newCache = localStorage.getItem('stacks_ai_cats_v1');
+    if (newCache) { setTimeout(() => renderSettings(), 100); }
+    else { btn.disabled = false; btn.textContent = '↺ Auto-discover via Wikipedia (no AI needed)'; }
+  });
+  body.appendChild(wikiDiscoverBtn);
+
+  // ── HUMANITIES TOPICS ──
+  const humanitiesTab = getTab('humanities');
+  const humSection = document.createElement('div');
+  humSection.className = 'settings-section-title';
+  humSection.style.marginTop = '1.5rem';
+  humSection.textContent = 'Humanities Journal Topics';
+  body.appendChild(humSection);
+
+  const humBox = document.createElement('div');
+  humBox.className = 'api-key-section';
+  const humDesc = document.createElement('div');
+  humDesc.style.cssText = 'font-family:"Source Serif 4",serif;font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;line-height:1.5;';
+  humDesc.textContent = 'Articles from the Humanities Journals tab are filtered to match these topics. Add any area of interest — the system will prioritise matching articles from open-access journals.';
+  humBox.appendChild(humDesc);
+
+  const topicsList = document.createElement('div');
+  topicsList.className = 'humanities-topics-section';
+  topicsList.id = 'humaniticsTopicsList';
+
+  const renderTopics = () => {
+    topicsList.innerHTML = '';
+    const topics = humanitiesTab?.topics || [];
+    topics.forEach((topic, idx) => {
+      const row = document.createElement('div');
+      row.className = 'humanities-topic-row';
+      const name = document.createElement('span');
+      name.className = 'humanities-topic-name';
+      name.textContent = topic;
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-topic-btn';
+      removeBtn.textContent = '✕ Remove';
+      removeBtn.addEventListener('click', () => {
+        humanitiesTab.topics.splice(idx, 1);
+        saveState();
+        renderTopics();
+      });
+      row.appendChild(name);
+      row.appendChild(removeBtn);
+      topicsList.appendChild(row);
+    });
+
+    const addRow = document.createElement('div');
+    addRow.className = 'add-topic-row';
+    const topicInput = document.createElement('input');
+    topicInput.className = 'topic-input';
+    topicInput.type = 'text';
+    topicInput.placeholder = 'e.g. Reformation theology, Baroque literature…';
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-topic-btn';
+    addBtn.textContent = '+ Add';
+    addBtn.addEventListener('click', () => {
+      const val = topicInput.value.trim();
+      if (!val) return;
+      if (!humanitiesTab.topics) humanitiesTab.topics = [];
+      humanitiesTab.topics.push(val);
+      saveState();
+      renderTopics();
+    });
+    topicInput.addEventListener('keydown', e => { if (e.key === 'Enter') addBtn.click(); });
+    addRow.appendChild(topicInput);
+    addRow.appendChild(addBtn);
+    topicsList.appendChild(addRow);
+  };
+  renderTopics();
+  humBox.appendChild(topicsList);
+  body.appendChild(humBox);
+
+  // ── TOPIC TABS ──
+  const lbl = document.createElement('div');
+  lbl.className = 'settings-section-title';
+  lbl.style.marginTop = '1.5rem';
+  lbl.textContent = 'Topic Tabs — Your Categories';
+  body.appendChild(lbl);
+
+  const tabsDesc = document.createElement('div');
+  tabsDesc.style.cssText = 'font-family:"Source Serif 4",serif;font-size:0.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.5;';
+  tabsDesc.textContent = 'These are your editable preset categories. The AI sees these when generating its additional suggestions, so any edits you make here will be reflected in the next AI refresh.';
+  body.appendChild(tabsDesc);
+
+  tabs.filter(t => !t.tabType).forEach((tab, idx) => {
+    const globalIdx = tabs.indexOf(tab);
+    const row = document.createElement('div');
+    row.className = 'settings-tab-row'; row.dataset.idx = globalIdx;
+
+    const nameRow = document.createElement('div');
+    nameRow.className = 'settings-tab-name-row';
+    const nameInput = document.createElement('input');
+    nameInput.className = 'settings-name-input'; nameInput.type = 'text';
+    nameInput.value = tab.name; nameInput.dataset.field = 'name';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-tab-btn'; delBtn.textContent = '\u2715 Delete';
+    delBtn.addEventListener('click', () => { tabs.splice(globalIdx,1); activeTabs.delete(tab.id); renderSettings(); });
+    nameRow.appendChild(nameInput); nameRow.appendChild(delBtn);
+
+    // Static categories — editable
+    const catsLabel = document.createElement('label');
+    catsLabel.className = 'settings-cats-label';
+    catsLabel.textContent = '\u270e Your preset categories (editable, comma-separated)';
+    const catsInput = document.createElement('textarea');
+    catsInput.className = 'settings-cats-input';
+    catsInput.value = tab.categories.join(', '); catsInput.dataset.field = 'categories';
+
+    row.appendChild(nameRow); row.appendChild(catsLabel); row.appendChild(catsInput);
+
+    // AI categories — read-only, collapsible
+    if (tab._aiCategories?.length) {
+      const aiToggle = document.createElement('button');
+      aiToggle.className = 'ai-cats-toggle';
+      aiToggle.textContent = `\u2728 Show AI-generated categories (${tab._aiCategories.length}) \u25be`;
+      const aiDisplay = document.createElement('div');
+      aiDisplay.className = 'ai-cats-display';
+      aiDisplay.style.display = 'none';
+      aiDisplay.textContent = tab._aiCategories.join(', ');
+      aiToggle.addEventListener('click', () => {
+        const open = aiDisplay.style.display !== 'none';
+        aiDisplay.style.display = open ? 'none' : 'block';
+        aiToggle.textContent = open
+          ? `\u2728 Show AI-generated categories (${tab._aiCategories.length}) \u25be`
+          : `\u2728 Hide AI-generated categories \u25b4`;
+      });
+      row.appendChild(aiToggle);
+      row.appendChild(aiDisplay);
+    } else {
+      const noAi = document.createElement('div');
+      noAi.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:0.58rem;color:var(--muted);margin-top:0.4rem;opacity:0.7;';
+      noAi.textContent = 'No discovered categories yet — tap ↺ Discover New Categories above.';
+      row.appendChild(noAi);
+    }
+
+    body.appendChild(row);
+  });
+
+  const addSection = document.createElement('div');
+  addSection.className = 'add-tab-section';
+  addSection.innerHTML = `<div class="add-tab-title">Add New Tab</div>
+    <input class="settings-input" id="newTabName" type="text" placeholder="Tab name (e.g. Maritime)">
+    <label class="settings-cats-label">Wikipedia categories (comma-separated)</label>
+    <textarea class="settings-cats-input" id="newTabCats" style="min-height:55px"
+      placeholder="Maritime_history, Piracy, Naval_battles"></textarea><br>
+    <button class="add-tab-btn" id="addTabBtn">+ Add Tab</button>`;
+  body.appendChild(addSection);
+
+  document.getElementById('addTabBtn').addEventListener('click', () => {
+    const name = document.getElementById('newTabName').value.trim();
+    const cats = document.getElementById('newTabCats').value.trim();
+    if (!name || !cats) return;
+    const colors = ['#4a1010','#003355','#104410','#2a0a4a','#3a2200','#002240','#1a1a10'];
+    tabs.push({ id: 'tab_'+Date.now(), name, color: colors[tabs.length % colors.length],
+      categories: cats.split(',').map(c=>c.trim()).filter(Boolean) });
+    activeTabs.add(tabs[tabs.length-1].id);
+    renderSettings();
+  });
+}
+
+function collectSettingsData() {
+  return [...document.querySelectorAll('.settings-tab-row')].map(row => {
+    const orig = tabs[parseInt(row.dataset.idx)];
+    if (!orig) return null;
+    return { ...orig,
+      name: row.querySelector('[data-field="name"]')?.value.trim() || orig.name,
+      categories: row.querySelector('[data-field="categories"]')
+        ?.value.split(',').map(c=>c.trim()).filter(Boolean) || orig.categories
+    };
+  }).filter(Boolean);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EVENTS + INIT
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('readerBack').addEventListener('click', closeReader);
+document.getElementById('settingsBtn').addEventListener('click', openSettings);
+document.getElementById('settingsClose').addEventListener('click', closeSettings);
+document.getElementById('refreshBtn').addEventListener('click', refreshFeed);
+document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
+document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+  const wikiTabs = collectSettingsData();
+  // Preserve special tabs
+  const specialTabs = tabs.filter(t => t.tabType);
+  tabs = [...wikiTabs, ...specialTabs];
+  const valid = new Set(tabs.map(t=>t.id));
+  activeTabs = new Set([...activeTabs].filter(id => valid.has(id)));
+  if (!activeTabs.size && tabs.length) activeTabs.add(tabs[0].id);
+  saveState(); closeSettings(); renderTabBar(); refreshFeed();
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('settingsOverlay').classList.contains('open')) closeSettings();
+  else closeReader();
+});
+
+(async function init() {
+  document.getElementById('mastheadDate').textContent = new Date().toLocaleDateString('en-US',{
+    weekday:'short', year:'numeric', month:'short', day:'numeric'
+  });
+  setSessionQuote();
+  // Register service worker for PWA install support
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+  loadState();
+  renderTabBar();
+  // Background non-blocking warm-ups
+  refreshAICategories().then(() => renderTabBar());
+  fetchAPODImages(); // warm up APOD cache for beauty tiles
+  refreshFeed();
+})();
+</script>
+</body>
+</html>
